@@ -78,7 +78,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "OPTIONS": {
             "service": "admin",
-            "passfile": ".pg_pass",
+            "passfile": ".pgpass",
         },
     }
 }
