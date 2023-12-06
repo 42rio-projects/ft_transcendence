@@ -1,4 +1,4 @@
-COMPOSE = docker-compose -f src/docker-compose.yml
+COMPOSE = cd src && docker-compose -f docker-compose.yml
 
 all: up
 

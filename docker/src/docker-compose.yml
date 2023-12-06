@@ -4,7 +4,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ../django
+      device: ../../django
 
 services:
   django:
