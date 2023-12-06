@@ -1,0 +1,19 @@
+volumes:
+  django:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ../django
+
+services:
+  django:
+    container_name: django
+    build: requirements/django
+    env_file: .env
+    restart: on-failure
+    ports:
+      - 8000:8000
+      - 5432:5432
+    volumes:
+      - django:/usr/src/app
