@@ -76,9 +76,10 @@ WSGI_APPLICATION = 'ft_transcendence.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        "HOST": "db.ubretkwfwjuhaqnotzky.supabase.co",
         "OPTIONS": {
             "service": "admin",
-            "passfile": ".pgpass",
         },
     }
 }
