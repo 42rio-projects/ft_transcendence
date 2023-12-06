@@ -7,6 +7,5 @@ COPY tools/script.sh /
 RUN pip install --upgrade pip && pip install django psycopg[binary]
 
 EXPOSE 8000
-EXPOSE 5432
 
 ENTRYPOINT ["/script.sh"]
