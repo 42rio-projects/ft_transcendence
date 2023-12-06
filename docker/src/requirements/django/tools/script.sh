@@ -7,5 +7,4 @@ password=$DB_PASSWORD
 dbname=$DB_NAME
 port=$DB_PORT"
 
-python manage.py migrate
 python manage.py runserver 0.0.0.0:8000
