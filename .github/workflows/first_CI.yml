@@ -32,7 +32,7 @@ jobs:
           echo "DB_PASSWORD=${DB_PASSWORD}" >> env_file
           
       - name: Switch to docker Folder
-        run: cd Docker
+        run: cd docker
         
       - name: Make
         run: make
