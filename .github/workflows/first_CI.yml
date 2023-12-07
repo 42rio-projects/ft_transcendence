@@ -30,12 +30,18 @@ jobs:
           echo "DB_NAME=${DB_NAME}" >> env_file
           echo "DB_PORT=${DB_PORT}" >> env_file
           echo "DB_PASSWORD=${DB_PASSWORD}" >> env_file
-          
+  
+      - name: install make
+        run: apt-get install make
+
       - name: Switch to docker Folder
         run: cd docker
         
       - name: Make
-        run: make
+        run: |
+          pwd
+          ls -la
+           make
 
       - name: Uptest
         run: curl http://localhost:5000
