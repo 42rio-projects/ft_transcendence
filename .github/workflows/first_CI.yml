@@ -35,7 +35,7 @@ jobs:
         run: sudo apt-get install make
         
       - name: Make
-        working-directory: ./app
+        working-directory: ./docker
         run: |
           pwd
           ls -la
