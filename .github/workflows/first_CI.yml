@@ -42,4 +42,4 @@ jobs:
           make
 
       - name: Uptest
-        run: curl http://localhost:5000
+        run: curl http://localhost:8000
