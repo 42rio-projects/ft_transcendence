@@ -35,10 +35,11 @@ jobs:
         run: sudo apt-get install make
         
       - name: Make
+        working-directory: ./app
         run: |
           pwd
           ls -la
-           ./docker/make
+          make
 
       - name: Uptest
         run: curl http://localhost:5000
