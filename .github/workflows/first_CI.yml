@@ -32,7 +32,7 @@ jobs:
           echo "DB_PASSWORD=${DB_PASSWORD}" >> env_file
   
       - name: install make
-        run: apt-get install make
+        run: sudo apt-get install make
 
       - name: Switch to docker Folder
         run: cd docker
