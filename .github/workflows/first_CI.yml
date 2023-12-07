@@ -25,23 +25,20 @@ jobs:
         
       - name: Create env_file
         run: |
-          echo "DB_HOST=${DB_HOST}" > env_file
-          echo "DB_USER=${DB_USER}" >> env_file
-          echo "DB_NAME=${DB_NAME}" >> env_file
-          echo "DB_PORT=${DB_PORT}" >> env_file
-          echo "DB_PASSWORD=${DB_PASSWORD}" >> env_file
+          echo "DB_HOST=${DB_HOST}" > ./docker/src/.env
+          echo "DB_USER=${DB_USER}" >> ./docker/src/.env
+          echo "DB_NAME=${DB_NAME}" >> ./docker/src/.env
+          echo "DB_PORT=${DB_PORT}" >> ./docker/src/.env
+          echo "DB_PASSWORD=${DB_PASSWORD}" >> ./docker/src/.env
   
       - name: install make
         run: sudo apt-get install make
-
-      - name: Switch to docker Folder
-        run: cd docker
         
       - name: Make
         run: |
           pwd
           ls -la
-           make
+           ./docker/make
 
       - name: Uptest
         run: curl http://localhost:5000
