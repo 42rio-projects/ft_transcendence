@@ -18,10 +18,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Installing docker
-        run: curl -fsSL https://get.docker.com/ | sh
+        uses: actions/checkout@v4
         
       - name: Create env_file
         run: |
