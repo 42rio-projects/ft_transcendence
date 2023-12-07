@@ -31,6 +31,9 @@ jobs:
           echo "DB_PORT=${DB_PORT}" >> env_file
           echo "DB_PASSWORD=${DB_PASSWORD}" >> env_file
           
+      - name: Switch to docker Folder
+        run: cd Docker
+        
       - name: Make
         run: make
 
