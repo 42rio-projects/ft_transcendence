@@ -40,7 +40,8 @@ jobs:
           pwd
           ls -la
           make
+          sleep 5
           docker ps
-
+          
       - name: Uptest
         run: curl http://localhost:8000
