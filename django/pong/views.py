@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
+from .models import Game
 from django.db import IntegrityError
 
 
@@ -47,9 +48,22 @@ class UserEndpoint(APIView):
             return Response({"error": str(e)}, 500)
 
 
-class Game(APIView):
+class GameEndpoint(APIView):
     def get(self, request, format=None):
-        return Response({"method": "get", "data": request.data})
+        try:
+            games = Game.objects.all()
+            return Response(games.values())
+        except Game.DoesNotExist as e:
+            return Response({"error": str(e)}, 404)
+        except Exception as e:
+            return Response({"error": str(e)}, 500)
 
     def post(self, request, format=None):
-        return Response({"method": "post", "data": request.data})
+        winner = User.objects.get(username=request.data["winner"])
+        loser = User.objects.get(username=request.data["loser"])
+        game = Game(winner=winner,
+                    loser=loser,
+                    winner_points=request.data["winner_points"],
+                    loser_points=request.data["loser_points"])
+        game.save()
+        return Response({"created": game.id})
