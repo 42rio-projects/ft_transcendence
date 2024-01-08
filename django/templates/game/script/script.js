@@ -1,194 +1,264 @@
-var width = 800;
-var height = 400;
-var pi = Math.PI;
-var UpArrow = 38;
-var DownArrow = 40;
-var canvas, ctx, keystate, player, ai, ball;
-
-player = {
-  x: null,
-  y: null,
-  height: 100,
-  width: 20,
-  playerScore: 0,
-  
-  update: function() {
-    if (keystate[UpArrow] && this.y > 0) this.y -= 7;
-    if (keystate[DownArrow] && (this.y + this.height) < height) this.y += 7;
-  },
-  
-  draw: function() {
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+(function() {
+  var lastTime = 0;
+  var vendors = ['webkit', 'moz'];
+  for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+      window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+      window.cancelAnimationFrame =
+        window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
   }
-};
 
-ai = {
-  x: null,
-  y: null,
-  height: 100,
-  width: 20,
-  aiScore: 0,
-  
-  update: function() {
-    let ballPos = (ball.y + (ball.side/2) - (this.height / 2));
-    if (ballPos > this.y) {
-      this.y += 1.5;
-    } else if (ballPos < this.y) {
-      this.y -= 1.5;
+  if (!window.requestAnimationFrame)
+      window.requestAnimationFrame = function(callback, element) {
+          var currTime = new Date().getTime();
+          var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+          var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+            timeToCall);
+          lastTime = currTime + timeToCall;
+          return id;
+      };
+
+  if (!window.cancelAnimationFrame)
+      window.cancelAnimationFrame = function(id) {
+          clearTimeout(id);
+      };
+}());
+
+/*
+
+The code above is from: http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+
+For more information go there.
+
+*/
+var canvas = document.getElementById("canvas"),
+  ctx = canvas.getContext("2d");
+
+canvas.width = 700;
+canvas.height = 350;
+
+var iNumber = 0, 
+  iPlayer_1Hei = 90,
+  iPlayer_1YPos = 25,
+  iPlayer_1XPos = 20,
+  iPlayer_1Speed = 15,
+  bPlayer_1MovingUp = false,
+  bPlayer_1MovingDown = false,
+  iPlayer_2Hei = 90,
+  iPlayer_2YPos = 25,
+  iPlayer_2XPos = canvas.width - 20,
+  iPlayer_2Speed = 15,
+  bPlayer_2MovingUp = false,
+  bPlayer_2MovingDown = false,
+  iBallX = 50,
+  iBallY = 150,
+  iBallStartSpeed = 6,
+  iXBallSpeed = iBallStartSpeed,
+  iYBallSpeed = iXBallSpeed,
+  iPoints_1 = 0,
+  iPoints_2 = 0;
+
+fnGamePlay();
+function fnGamePlay(){
+canvas.width = canvas.width;
+fnDrawPlayer_1();
+fnDrawPlayer_2();
+fnDrawBall();
+fnCalc();
+fnPoints();
+window.requestAnimationFrame(fnGamePlay);
+}
+
+window.addEventListener("keydown", function(ev){
+if(ev.keyCode == 87) {
+  if(bPlayer_1MovingUp === false) {
+    if(bPlayer_1MovingDown === true) {
+      clearInterval(Player_1MoveInterval);
     }
-  },
-  
-  draw: function() {
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    bPlayer_1MovingUp = true;
+    Player_1MoveInterval = setInterval(function(){
+      iPlayer_1YPos -= iPlayer_1Speed;
+      if(iPlayer_1YPos < 15) {
+        iPlayer_1YPos = 15;
+      }
+    }, 23);
   }
-};
-
-ball = {
-  x: null,
-  y: null,
-  vel: null,
-  speed: 2,    // mude a velocidade da bola aqui querido.
-  side: 20,
-  
-  update: function() {
-    this.x += this.vel.x;
-    this.y += this.vel.y;
-    
-    if (0 > this.y || this.y + this.side > height) {
-      this.vel.y *= -1;
+}
+if(ev.keyCode == 83) {
+  if(bPlayer_1MovingDown === false) {
+    if(bPlayer_1MovingUp === true) {
+      clearInterval(Player_1MoveInterval);
     }
-    
-    var shouldBounce = function(ax, ay, aw, ah, bx, by, bw, bh) {
-      return ax < bx+bw && ay < by+bh && bx < ax+aw && by < ay+ah;
-    };
-    
-    var padel = this.vel.x < 0 ? player : ai;
-    if (shouldBounce(padel.x, padel.y, padel.width, padel.height, this.x, this.y, this.side, this.side)) {
-      let whereHit = (this.y + this.side - padel.y) / (padel.height + this.side);
-      let phi = .25 * pi * (2 * whereHit - 1);
-      this.vel.x = (padel === player ? 1 : -1) * this.speed * Math.cos(phi);
-      this.vel.y = this.speed * Math.sin(phi);
-    }
-    if (this.x < 0) {
-      ai.aiScore++;
-      ballReset();
-    }
-    if (this.x > canvas.width) {
-      player.playerScore++;
-      ballReset();
-    }
-  },
-  
-  draw: function() {
-    ctx.fillRect(this.x, this.y, this.side, this.side);
+    bPlayer_1MovingDown = true;
+    Player_1MoveInterval = setInterval(function(){
+      iPlayer_1YPos += iPlayer_1Speed;
+      if(iPlayer_1YPos + iPlayer_1Hei >= canvas.height - 15) {
+        iPlayer_1YPos = canvas.height - iPlayer_1Hei - 15;
+      }
+    }, 23);
   }
-};
-
-function trackGameTime() {
-  var startTime = new Date().getTime(); // Tempo inicial
-
-  // Atualiza a cada segundo
-  setInterval(function() {
-      var currentTime = new Date().getTime();
-      var elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
-
-      // Calcula minutos e segundos
-      var minutes = Math.floor(elapsedTimeInSeconds / 60);
-      var seconds = elapsedTimeInSeconds % 60;
-
-      // Atualiza o elemento com o tempo decorrido
-      document.getElementById('timer').textContent = formatTime(minutes, seconds);
-  }, 1000);
 }
-
-function formatTime(minutes, seconds) {
-  return pad(minutes) + ':' + pad(seconds);
-}
-
-function pad(number) {
-  return (number < 10 ? '0' : '') + number;
-}
-
-function main() {
-  canvas = document.getElementById('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  ctx = canvas.getContext('2d');
-  trackGameTime();
-  
-  keystate = {};
-  document.addEventListener('keydown', (evt) => {
-    keystate[evt.keyCode] = true;
-  });
-  document.addEventListener('keyup', (evt) => {
-    delete keystate[evt.keyCode];
-  });
-  
-  init();
-  
-  var loop = function() {
-    update();
-    draw();
-    
-    window.requestAnimationFrame(loop, canvas);
-  };
-  
-  window.requestAnimationFrame(loop, canvas);
-}
-
-function init() {
-  timer = 0;
-
-  player.playerScore = 0;
-  player.x = player.width;
-  player.y = (height - player.height) / 2;
-  
-  ai.aiScore = 0;
-  ai.x = width - (player.width + ai.width);
-  ai.y = (height - ai.height) / 2;
-  
-  ball.x = (width - ball.side) / 2;
-  ball.y = (height - ball.side) / 2;
-  ball.vel = {
-    x: ball.speed,
-    y: 0
-  };
-}
-
-function update() {
-  player.update();
-  ai.update();
-  ball.update();
-}
-
-function draw() {
-  ctx.fillRect(0, 0, width, height);
-  ctx.save();
-  ctx.fillStyle = '#ffffff';
-  
-  player.draw();
-  ai.draw();
-  ball.draw();
-  
-  let w = 4;
-  let x = (width - w) * 0.5;
-  let y = 0;
-  let step = height/20;
-  while (y < height) {
-    ctx.fillRect(x, y+step*0.2, w, step*0.6);
-    y += step;
+if(ev.keyCode == 38) {
+  if(bPlayer_2MovingUp === false) {
+    if(bPlayer_2MovingDown === true) {
+      clearInterval(Player_2MoveInterval);
+    }
+    bPlayer_2MovingUp = true;
+    Player_2MoveInterval = setInterval(function(){
+      iPlayer_2YPos -= iPlayer_2Speed;
+      if(iPlayer_2YPos < 15) {
+        iPlayer_2YPos = 15;
+      }
+    }, 23);
   }
-  
-  document.getElementById("player1-score").innerText = player.playerScore;
-  document.getElementById("player2-score").innerText = ai.aiScore;
+}
+if(ev.keyCode == 40) {
+  if(bPlayer_2MovingDown === false) {
+    if(bPlayer_2MovingUp === true) {
+      clearInterval(Player_2MoveInterval);
+    }
+    bPlayer_2MovingDown = true;
+    Player_2MoveInterval = setInterval(function(){
+      iPlayer_2YPos += iPlayer_2Speed;
+      if(iPlayer_2YPos + iPlayer_2Hei >= canvas.height - 15) {
+        iPlayer_2YPos = canvas.height - iPlayer_2Hei - 15;
+      }
+    }, 23);
+  }
+}
+}, false);
 
-  ctx.restore();
+window.addEventListener("keyup", function(ev){
+if(ev.keyCode == 87) {
+  bPlayer_1MovingUp = false;
+  clearInterval(Player_1MoveInterval);
+}
+if(ev.keyCode == 83) {
+  bPlayer_1MovingDown = false;
+  clearInterval(Player_1MoveInterval);
+}
+if(ev.keyCode == 38) {
+  bPlayer_2MovingUp = false;
+  clearInterval(Player_2MoveInterval);
+}
+if(ev.keyCode == 40) {
+  bPlayer_2MovingDown = false;
+  clearInterval(Player_2MoveInterval);
+}
+}, false);
+
+function fnDrawPlayer_1() {
+ctx.beginPath();
+ctx.moveTo(iPlayer_1XPos, iPlayer_1YPos);
+ctx.lineTo(iPlayer_1XPos, iPlayer_1YPos + iPlayer_1Hei);
+ctx.lineWidth = 13;
+ctx.strokeStyle = "white";
+ctx.stroke();
 }
 
-function ballReset() {
-  ball.vel.x = -ball.vel.x;
-  ball.x = canvas.width / 2;
-  ball.y = canvas.height / 2;
+function fnDrawPlayer_2() {
+ctx.beginPath();
+ctx.moveTo(iPlayer_2XPos, iPlayer_2YPos);
+ctx.lineTo(iPlayer_2XPos, iPlayer_2YPos + iPlayer_2Hei);
+ctx.lineWidth = 13;
+ctx.strokeStyle = "white";
+ctx.stroke();
 }
 
-main();
+function fnDrawBall() {
+ctx.beginPath();
+ctx.moveTo(iBallX, iBallY);
+ctx.lineTo(iBallX + 15, iBallY);
+ctx.lineWidth = 15;
+ctx.stroke();
+}
+
+function fnPoints() {
+document.getElementById("player_1").innerHTML = iPoints_1;
+document.getElementById("player_2").innerHTML = iPoints_2;
+}
+
+function fnCalc() {
+iBallX += iXBallSpeed;
+iBallY += iYBallSpeed;
+if(iBallX + 15 > canvas.width) {
+  fnWait();
+  iPoints_1 += 1;
+}
+if(iBallY + 22.5 > canvas.height) {
+  iYBallSpeed = -iYBallSpeed;
+}
+if(iBallX < 0) {
+  fnWait();
+  iPoints_2 += 1;
+}
+if(iBallY < 22.5) {
+  iYBallSpeed = -iYBallSpeed;
+}
+if(iXBallSpeed < 0 && iBallX < 50 ||
+   iXBallSpeed > 0 && iBallX > canvas.width - 50) {
+  if ((iBallX < iPlayer_1XPos + 7.5 &&
+      iBallX + 15  > iPlayer_1XPos &&
+      iBallY < iPlayer_1YPos + iPlayer_1Hei / 3 &&
+      iBallY + 15 > iPlayer_1YPos ||
+      iBallX < iPlayer_2XPos + 15 &&
+      iBallX + 15  > iPlayer_2XPos &&
+      iBallY < iPlayer_2YPos + iPlayer_2Hei / 3 &&
+      iBallY + 15 > iPlayer_2YPos) &&
+      !(iYBallSpeed >= 2 || iYBallSpeed <= -2) &&
+      !(iXBallSpeed >= 2 || iXBallSpeed <= -2)) {
+    ++iYBallSpeed;
+    --iXBallSpeed;
+  }
+  else if (iBallX < iPlayer_1XPos + 7.5 &&
+           iBallX + 15  > iPlayer_1XPos &&
+           iBallY < iPlayer_1YPos + 2 * (iPlayer_1Hei / 3) &&
+           iBallY + 15 > iPlayer_1YPos + iPlayer_1Hei / 3 ||
+           iBallX < iPlayer_2XPos + 15 &&
+           iBallX + 15  > iPlayer_2XPos &&
+           iBallY < iPlayer_2YPos + 2 * (iPlayer_2Hei / 3) &&
+           iBallY + 15 > iPlayer_2YPos + iPlayer_2Hei / 3) {
+    --iYBallSpeed;
+    ++iXBallSpeed;
+  }
+  else if ((iBallX < iPlayer_1XPos + 7.5 &&
+           iBallX + 15  > iPlayer_1XPos &&
+           iBallY < iPlayer_1YPos + 3 * (iPlayer_1Hei / 3) &&
+           iBallY + 15 > iPlayer_1YPos + 2 * (iPlayer_1Hei / 3) ||
+           iBallX < iPlayer_2XPos + 15 &&
+           iBallX + 15  > iPlayer_2XPos &&
+           iBallY < iPlayer_2YPos + 3 * (iPlayer_2Hei / 3) &&
+           iBallY + 15 > iPlayer_2YPos + 2 * (iPlayer_1Hei / 3)) &&
+           !(iYBallSpeed >= 2 || iYBallSpeed <= -2) &&
+           !(iXBallSpeed >= 2 || iXBallSpeed <= -2)) {
+    ++iYBallSpeed;
+    --iXBallSpeed;
+  }
+  console.log("y: " + iYBallSpeed);
+  console.log("x: " + iXBallSpeed);
+  if (iBallX < iPlayer_1XPos + 7.5 &&
+      iBallX + 15  > iPlayer_1XPos &&
+      iBallY < iPlayer_1YPos + iPlayer_1Hei &&
+      iBallY + 15 > iPlayer_1YPos ||
+      iBallX < iPlayer_2XPos + 15 &&
+      iBallX + 15  > iPlayer_2XPos &&
+      iBallY < iPlayer_2YPos + iPlayer_2Hei &&
+      iBallY + 15 > iPlayer_2YPos) {
+    iXBallSpeed = -iXBallSpeed;
+  }
+}
+}
+
+function fnWait() {
+iXBallSpeed = -iXBallSpeed;
+waitInterval = setInterval(function(){
+  iNumber += 1;
+  iBallX = canvas.width / 2;
+  iBallY = canvas.height / 2;
+  if(iNumber >= 100) {
+    clearInterval(waitInterval);
+    iXBallSpeed = iBallStartSpeed;
+    iYBallSpeed = iBallStartSpeed;
+    iNumber = 0;
+  }
+}, 10);
+}

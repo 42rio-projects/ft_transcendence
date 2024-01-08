@@ -1,79 +1,33 @@
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  margin: 0 auto;
+  background: #ccc;
+  text-align: center;
 }
 
-canvas {
-  margin-top: 5%;
-  border: 1px solid #fff;
+#canvas {
+  background: linear-gradient(45deg, #222, #444);
+  margin-top: 50px;
 }
 
-#scoreboard {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 800px;
-  background-color: #333;
+#points {
+  background: linear-gradient(#222, #111);
+  width: 30%;
+  min-width: 300px;
+  max-width: 680px;
   color: white;
-  padding: 10px 0;
-}
-
-.player {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.player-name {
-  font-size: 18px;
-}
-
-.player-score {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-#powerups {
-  display: flex;
-  width: 700px;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1%;
-}
-
-.powerupGroup {
-  display:flex;
-  align-items: center;
-  padding: 2px;
-}
-.powerup {
-  width: 20px;
-  height: 20px;
-  background-color: #3498db;
-  margin-top: 5px;
-  margin-right: 5px;
-}
-
-#timer {
-  font-size: 18px;
+  font-family: calibri light;
+  margin: 0 auto;
+  font-size: 50px;
+  padding: 5px;
+  border-radius: 2px;
 }
 
 #controls {
-  margin-top: 20px;
-  text-align: center;
-  width: 600px;
-  background-color: #e6e6e6;
+  background: rgba(0, 0, 0, 0.2);
+  width: 30%;
+  min-width: 300px;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 5px;
+  font-family: calibri;
 }
-
-h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-
