@@ -1,3 +1,5 @@
+# Paths are relative to docker-compose.yml, not Makefile
+
 volumes:
   django:
     driver: local
@@ -6,13 +8,30 @@ volumes:
       o: bind
       device: ../../django
 
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ../../postgres_data
+
 services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    env_file: .env
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   django:
     container_name: django
     build: requirements/django
     env_file: .env
-    restart: on-failure
-    ports:
-      - 8000:8000
+    restart: always
     volumes:
       - django:/usr/src/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres

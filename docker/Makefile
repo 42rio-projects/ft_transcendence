@@ -1,8 +1,10 @@
 COMPOSE = cd src && docker-compose -f docker-compose.yml
 
+VOLUMES = ../postgres_data
+
 all: up
 
-up:
+up: volumes
 	$(COMPOSE) up -d --build
 
 start:
@@ -20,7 +22,10 @@ restart:
 logs:
 	$(COMPOSE) logs -f
 
+volumes:
+	mkdir -p $(VOLUMES)
+
 clean: down
 	docker rm -f $$(docker ps -aq) & docker rmi -f $$(docker images -q)
 
-.PHONY: all up start down stop restart logs clean
+.PHONY: all up start down stop restart logs volumes clean
