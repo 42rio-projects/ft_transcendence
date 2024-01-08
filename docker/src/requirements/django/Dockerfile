@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY tools/script.sh /
 
-RUN pip install --upgrade pip && pip install django psycopg[binary]
+RUN pip install --upgrade pip && pip install django psycopg[binary] djangorestframework
 
 EXPOSE 8000
 
