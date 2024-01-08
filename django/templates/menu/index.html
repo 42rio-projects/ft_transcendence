@@ -1,52 +1,36 @@
-{% load static %}
 <!DOCTYPE html>
-<!-- Coding By CodingNepal - codingnepalweb.com -->
 <html lang="en">
-
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<!-- ===== CSS ===== -->
-	<link rel="stylesheet" type="text/css" href="{% static 'menu/style.css' %}">
-
-	<!-- ===== Boxicons CSS ===== -->
-	<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<title>ft_transcendence</title>
 </head>
 
 <body>
+<header>
+	<h1 id="logo">My Logo</h1>
 	<nav>
-		<div class="nav-bar">
-			<i class='bx bx-menu sidebarOpen'></i>
-			<span class="logo navLogo"><a href="#">ft_transcendence</a></span>
-
-			<div class="menu">
-				<div class="logo-toggle">
-					<span class="logo"><a href="#">ft_transcendence</a></span>
-					<i class='bx bx-x siderbarClose'></i>
-				</div>
-
-				<ul class="nav-links">
-					<li><a href="#">Home</a></li>
-					<li><a href="#">Online</a></li>
-					<li><a href="game/">Local Multiplayer</a></li>
-					<li><a href="#">Contact</a></li>
-				</ul>
-			</div>
-
-			<div class="dark-light">
-				<i class='bx bx-moon moon'></i>
-				<i class='bx bx-sun sun'></i>
-			</div>
-
-		</div>
+	  <ul>
+		<li>42 site</li>
+	  </ul>
 	</nav>
+</header>
+<div class="login-page">
+	<div class="form">
+	   <form class="login-form" id="loginForm">
+		  <input type="text" id="usernameInput" placeholder="username" />
+		  <input type="password" id="passwordInput" placeholder="password" />
+		  <button type="button" id="loginButton">login</button>
+		  <p class="message" id="errorMessage"></p>
+	   </form>
+	</div>
+ </div>
 
-	<script type="text/javascript" src="{% static 'menu/script.js' %}"></script>
 
+
+<!-- Script -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script type="text/javascript" src="script.js"></script>
 </body>
 
 </html>
