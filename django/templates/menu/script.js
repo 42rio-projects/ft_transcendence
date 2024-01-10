@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
           colorOptions.forEach(function(option) {
               option.style.border = 'none';
           });
-          colorOption.style.border = '2px solid #000';
+          colorOption.style.border = '3px solid #fefefe';
 
           // FALTA ENVIAR PARA O BACKEND ESA BUDEGA
       });
