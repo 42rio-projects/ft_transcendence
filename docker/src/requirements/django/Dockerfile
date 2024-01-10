@@ -1,11 +1,12 @@
-FROM python:alpine
+FROM python
 
 WORKDIR /usr/src/app
 
 COPY tools/script.sh /
 
-RUN apk add --no-cache curl bash
-RUN pip install --upgrade pip && pip install django psycopg[binary] djangorestframework
+RUN pip install --upgrade pip && \
+    pip install django psycopg[binary] \
+        djangorestframework
 
 # Script to wait for a host:port to be available
 RUN curl -fsSLo /wait-for-it.sh \

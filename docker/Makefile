@@ -26,6 +26,9 @@ volumes:
 	mkdir -p $(VOLUMES)
 
 clean: down
-	docker rm -f $$(docker ps -aq) & docker rmi -f $$(docker images -q)
+	-docker rm -f $$(docker ps -aq)
+	-docker rmi -f $$(docker images -aq)
+	-docker volume rm -f $$(docker volume ls -q)
+	-docker network rm -f $$(docker network ls -q)
 
 .PHONY: all up start down stop restart logs volumes clean
