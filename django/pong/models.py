@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 
 class Tournament(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=100, primary_key=True)
     beginning = models.DateField(auto_now_add=True)
     last_update = models.DateField(auto_now=True)
 
