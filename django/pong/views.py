@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from .models import Game
 from .models import Tournament
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
+from .utils.pong_game import get_game_instances
+from .utils.pong_game import create_game
 
 
 def menu(request):
@@ -52,22 +55,20 @@ class UserEndpoint(APIView):
 class GameEndpoint(APIView):
     def get(self, request, format=None):
         try:
-            games = Game.objects.all()
-            return Response(games.values())
+            return Response(get_game_instances(), 200)
         except Game.DoesNotExist as e:
-            return Response({"error": str(e)}, 404)
+            return Response(f"{str(e)}", 200)
         except Exception as e:
-            return Response({"error": str(e)}, 500)
+            return Response(str(e), 500)
 
     def post(self, request, format=None):
-        winner = User.objects.get(username=request.data["winner"])
-        loser = User.objects.get(username=request.data["loser"])
-        game = Game(winner=winner,
-                    loser=loser,
-                    winner_points=request.data["winner_points"],
-                    loser_points=request.data["loser_points"])
-        game.save()
-        return Response({"created": game.id})
+        try:
+            create_game(request.data)
+            return Response("Game created.", 200)
+        except Tournament.DoesNotExist as e:
+            return Response(str(e), 400)
+        except Exception as e:
+            return Response(str(e), 500)
 
 
 class TournamentEndpoint(APIView):
