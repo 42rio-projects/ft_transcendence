@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import Game
+from .models import Tournament
 from django.db import IntegrityError
 
 
@@ -67,3 +68,23 @@ class GameEndpoint(APIView):
                     loser_points=request.data["loser_points"])
         game.save()
         return Response({"created": game.id})
+
+
+class TournamentEndpoint(APIView):
+    def get(self, request, format=None):
+        try:
+            tournaments = Tournament.objects.all()
+            return Response(tournaments.values())
+        except Game.DoesNotExist as e:
+            return Response({"error": str(e)}, 404)
+        except Exception as e:
+            return Response({"error": str(e)}, 500)
+
+    def post(self, request, format=None):
+        try:
+            name = request.data["name"]
+            tournament = Tournament(name=name)
+            tournament.save()
+            return Response({"created": tournament.name})
+        except Exception as e:
+            return Response({"error": str(e)}, 400)
