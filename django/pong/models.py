@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 
 class Tournament(models.Model):
     name = models.CharField(max_length=20)
-    end = models.DateField(auto_now_add=True)
+    beginning = models.DateField(auto_now_add=True)
+    last_update = models.DateField(auto_now=True)
 
 
 class Game(models.Model):
@@ -16,6 +17,7 @@ class Game(models.Model):
         User, null=True, on_delete=models.SET_NULL, related_name='losses')
     winner_points = models.PositiveSmallIntegerField()
     loser_points = models.PositiveSmallIntegerField()
-    end = models.DateField(auto_now_add=True)
+    beginning = models.DateField(auto_now_add=True)
+    last_update = models.DateField(auto_now=True)
     tournament = models.ForeignKey(
         Tournament, null=True, on_delete=models.SET_NULL, related_name="games")
