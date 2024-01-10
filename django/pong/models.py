@@ -19,5 +19,6 @@ class Game(models.Model):
     loser_points = models.PositiveSmallIntegerField()
     beginning = models.DateField(auto_now_add=True)
     last_update = models.DateField(auto_now=True)
+    tournament_round = models.PositiveSmallIntegerField(null=True)
     tournament = models.ForeignKey(
         Tournament, null=True, on_delete=models.SET_NULL, related_name="games")
