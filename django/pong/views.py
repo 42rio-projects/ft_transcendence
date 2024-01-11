@@ -10,6 +10,7 @@ from .utils.pong_game import create_game
 from .utils.pong_game import delete_game
 from pong.utils.pong_tournament import get_tournaments
 from pong.utils.pong_tournament import create_tournament
+from pong.utils.pong_tournament import delete_tournament
 from pong.utils.user import get_users
 from pong.utils.user import create_user
 from pong.utils.user import delete_user
@@ -83,8 +84,6 @@ class TournamentEndpoint(APIView):
     def get(self, request, format=None):
         try:
             return Response(get_tournaments())
-        except Tournament.DoesNotExist as e:
-            return Response(str(e), 200)
         except Exception as e:
             return Response(str(e), 500)
 
@@ -96,5 +95,16 @@ class TournamentEndpoint(APIView):
             return Response(str(e), 400)
         except IntegrityError as e:
             return Response(str(e), 409)
+        except Exception as e:
+            return Response(str(e), 500)
+
+    def delete(self, request, format=None):
+        try:
+            delete_tournament(request.data)
+            return Response("Tournament deleted.", 200)
+        except KeyError as e:
+            return Response(str(e), 400)
+        except Tournament.DoesNotExist as e:
+            return Response(str(e), 404)
         except Exception as e:
             return Response(str(e), 500)
