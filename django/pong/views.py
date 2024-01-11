@@ -7,6 +7,7 @@ from .models import Tournament
 from django.db import IntegrityError
 from .utils.pong_game import get_game_instances
 from .utils.pong_game import create_game
+from .utils.pong_game import delete_game
 from pong.utils.pong_tournament import get_tournaments
 from pong.utils.pong_tournament import create_tournament
 from pong.utils.user import get_users
@@ -38,8 +39,6 @@ class UserEndpoint(APIView):
         except Exception as e:
             return Response(str(e), 500)
 
-    # Delete methods should ignore body contents if received, this needs to be
-    # reworked afterwards
     def delete(self, request, format=None):
         try:
             delete_user(request.data)
@@ -56,8 +55,6 @@ class GameEndpoint(APIView):
     def get(self, request, format=None):
         try:
             return Response(get_game_instances(), 200)
-        except Game.DoesNotExist as e:
-            return Response(str(e), 200)
         except Exception as e:
             return Response(str(e), 500)
 
@@ -67,6 +64,17 @@ class GameEndpoint(APIView):
             return Response("Game created.", 200)
         except Tournament.DoesNotExist as e:
             return Response(str(e), 400)
+        except Exception as e:
+            return Response(str(e), 500)
+
+    def delete(self, request, format=None):
+        try:
+            delete_game(request.data)
+            return Response("Game deleted.", 200)
+        except KeyError as e:
+            return Response(str(e), 400)
+        except Game.DoesNotExist as e:
+            return Response(str(e), 404)
         except Exception as e:
             return Response(str(e), 500)
 
