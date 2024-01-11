@@ -2,12 +2,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from .models import Game
-from .models import Tournament
+from pong.models import Game
+from pong.models import Tournament
 from django.db import IntegrityError
-from .utils.pong_game import get_game_instances
-from .utils.pong_game import create_game
-from .utils.pong_game import delete_game
+from pong.utils.pong_game import get_game_instances
+from pong.utils.pong_game import create_game
+from pong.utils.pong_game import delete_game
 from pong.utils.pong_tournament import get_tournaments
 from pong.utils.pong_tournament import create_tournament
 from pong.utils.pong_tournament import delete_tournament
