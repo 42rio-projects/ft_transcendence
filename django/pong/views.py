@@ -5,9 +5,10 @@ from django.contrib.auth.models import User
 from .models import Game
 from .models import Tournament
 from django.db import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist
 from .utils.pong_game import get_game_instances
 from .utils.pong_game import create_game
+from pong.utils.pong_tournament import get_tournaments
+from pong.utils.pong_tournament import create_tournament
 
 
 def menu(request):
@@ -57,7 +58,7 @@ class GameEndpoint(APIView):
         try:
             return Response(get_game_instances(), 200)
         except Game.DoesNotExist as e:
-            return Response(f"{str(e)}", 200)
+            return Response(str(e), 200)
         except Exception as e:
             return Response(str(e), 500)
 
@@ -74,18 +75,19 @@ class GameEndpoint(APIView):
 class TournamentEndpoint(APIView):
     def get(self, request, format=None):
         try:
-            tournaments = Tournament.objects.all()
-            return Response(tournaments.values())
-        except Game.DoesNotExist as e:
-            return Response({"error": str(e)}, 404)
+            return Response(get_tournaments())
+        except Tournament.DoesNotExist as e:
+            return Response(str(e), 200)
         except Exception as e:
-            return Response({"error": str(e)}, 500)
+            return Response(str(e), 500)
 
     def post(self, request, format=None):
         try:
-            name = request.data["name"]
-            tournament = Tournament(name=name)
-            tournament.save()
-            return Response({"created": tournament.name})
+            create_tournament(request.data)
+            return Response("Tournament created.", 200)
+        except KeyError as e:
+            return Response(str(e), 400)
+        except IntegrityError as e:
+            return Response(str(e), 409)
         except Exception as e:
-            return Response({"error": str(e)}, 400)
+            return Response(str(e), 500)
