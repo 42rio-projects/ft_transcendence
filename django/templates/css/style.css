@@ -259,6 +259,11 @@ body.loading-page {
 }
 
 
+#welcome {
+  color:#FFF;
+  font-size: 4em;
+}
+
 /* Leaderboard */
 
 .leaderboard {
