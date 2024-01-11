@@ -79,7 +79,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "postgres",
-        "HOST": "db.ubretkwfwjuhaqnotzky.supabase.co",
+        "HOST": "postgres",
         "OPTIONS": {
             "service": "admin",
         },
