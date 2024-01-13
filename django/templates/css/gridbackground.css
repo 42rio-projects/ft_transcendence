@@ -3,9 +3,12 @@ body {
   rgba(0,0,0,0.8) 60%, 
   rgba(0,0,0,1) 90%), 
   url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/31787/stars.jpg);
-	background-size: cover;
+	background-size: 130%;
+	background-position: center;
 	z-index:-5;
 	font-family: 'Monoton', monospace;
+	overflow: hidden;
+	margin: 0;
 }
 
 h1 {

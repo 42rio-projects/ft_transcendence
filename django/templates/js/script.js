@@ -1,16 +1,18 @@
-$(document).ready(function() {
-  $("#loginButton").click(function() {
-     var username = $("#usernameInput").val();
-     var password = $("#passwordInput").val();
+document.addEventListener("DOMContentLoaded", function() {
+  var loginButton = document.getElementById("loginButton");
+  var usernameInput = document.getElementById("usernameInput");
+  var passwordInput = document.getElementById("passwordInput");
+  var errorMessage = document.getElementById("errorMessage");
 
-     // Verificar credenciais , essa parada aqui ta provisória, claro
-     if (username === "admin" && password === "42") {
-        // Redirecionar para a próxima página após o login bem-sucedido
-        window.location.href = "menu.html";
-     } else {
-        // Exibir mensagem de erro
-        $("#errorMessage").text("Credenciais inválidas. Tente novamente.");
-     }
+  loginButton.addEventListener("click", function() {
+      var username = usernameInput.value;
+      var password = passwordInput.value;
+      // Verificar credenciais (provisório)
+      if (username === "admin" && password === "42") {
+          window.location.href = "menu.html";
+      } else {
+          errorMessage.textContent = "Credenciais inválidas. Tente novamente.";
+      }
   });
 });
 
@@ -36,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
 function trackTimeOnPage() {
   var startTime = new Date().getTime(); // Tempo inicial
 
-  // Atualiza a cada segundo
   setInterval(function() {
       var currentTime = new Date().getTime();
       var elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
