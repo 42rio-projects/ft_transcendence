@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
       var password = passwordInput.value;
       // Verificar credenciais (provisório)
       if (username === "admin" && password === "42") {
-          window.location.href = "menu.html";
+          window.location.href = "/menu";
       } else {
           errorMessage.textContent = "Credenciais inválidas. Tente novamente.";
       }

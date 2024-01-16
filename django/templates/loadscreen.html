@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/gridbackground.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/gridbackground.css' %}">
 	<title>ft_transcendence</title>
 </head>
 
@@ -19,7 +20,7 @@
 
 
 <!-- Script -->
-<script type="text/javascript" src="js/script.js"></script>
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 </body>
 
 </html>

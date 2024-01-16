@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/game-style.css">
-	<link rel="stylesheet" type="text/css" href="../css/gridbackground.css">	
+	<link rel="stylesheet" type="text/css" href="{% static 'css/gameStyle.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/gridbackground.css' %}">
 	<title>ft_transcendence</title>
 </head>
 
@@ -50,7 +51,7 @@
 
 
 <!-- Script -->
-<script type="text/javascript" src="script/script.js"></script>
+<script type="text/javascript" src="{% static 'js/game-script.js' %}"></script>
 </body>
 
 </html>

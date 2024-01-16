@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" type="text/css" href="css/gridbackground.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/gridbackground.css' %}">
 	<title>ft_transcendence</title>
 </head>
 
@@ -40,10 +41,10 @@
     </div>
 </div>
 <section class="game-menu"> 
-    <a href="loadscreen.html" class="button button-newgame">Novo Jogo</a>
-    <a href="loadscreen.html" class="button button-settings">Ranked</a>
-    <a href="leaderboard.html" class="button button-leaderboard">Leaderboard</a>
-    <a href="/django/templates/game/game.html" class="button button-leaderboard">JOGO</a>
+    <a href="{% url 'loadscreen' %}" class="button button-newgame">Novo Jogo</a>
+    <a href="{% url 'loadscreen' %}" class="button button-settings">Ranked</a>
+    <a href="{% url 'leaderboard' %}" class="button button-leaderboard">Leaderboard</a>
+    <a href="{% url 'game' %}" class="button button-leaderboard">JOGO</a>
 </section>
     
 
@@ -64,7 +65,7 @@
  </div>
 
 <!-- Script -->
-<script type="text/javascript" src="js/script.js"></script>
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 </body>
 
 </html>

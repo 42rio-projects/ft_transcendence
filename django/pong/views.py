@@ -16,13 +16,20 @@ from pong.utils.user import create_user
 from pong.utils.user import delete_user
 
 
-def menu(request):
-    return render(request, "menu/index.html")
-
+def index(request):
+    return render(request, "index.html")
 
 def game(request):
-    return render(request, "game/index.html")
+    return render(request, "game.html")
 
+def menu(request):
+    return render(request, "menu.html")
+
+def loadscreen(request):
+    return render(request, "loadscreen.html")
+
+def leaderboard(request):
+    return render(request, "leaderboard.html")
 
 class UserEndpoint(APIView):
     def get(self, request, format=None):
