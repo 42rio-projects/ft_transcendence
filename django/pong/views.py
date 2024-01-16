@@ -8,6 +8,8 @@ from pong.utils.pong_game import get_game_instances, create_game, delete_game
 from pong.utils.pong_tournament import get_tournaments, create_tournament, delete_tournament
 from pong.utils.user import get_users, create_user, delete_user
 from .services import send_twilio_code, check_twilio_code
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
 
 class Menu(APIView):
@@ -20,8 +22,8 @@ class Game(APIView):
         return render(request, "game/index.html")
 
 
+@permission_classes([IsAuthenticated])
 class TwilioEndpoint(APIView):
-
     def post(self, request, format=None):
         to = request.data.get('to')
         channel = request.data.get('channel')
