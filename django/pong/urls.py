@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path("", views.menu, name="menu"),
     path("game/", views.game, name="game"),
+    path("api/twilio", views.TwilioEndpoint.as_view(), name="send_sms"),
     path("api/users", views.UserEndpoint.as_view(), name="users"),
     path("api/games", views.GameEndpoint.as_view(), name="games"),
     path(

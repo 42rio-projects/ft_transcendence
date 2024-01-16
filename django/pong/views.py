@@ -2,18 +2,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from pong.models import Game
-from pong.models import Tournament
+from pong.models import Game, Tournament
 from django.db import IntegrityError
-from pong.utils.pong_game import get_game_instances
-from pong.utils.pong_game import create_game
-from pong.utils.pong_game import delete_game
-from pong.utils.pong_tournament import get_tournaments
-from pong.utils.pong_tournament import create_tournament
-from pong.utils.pong_tournament import delete_tournament
-from pong.utils.user import get_users
-from pong.utils.user import create_user
-from pong.utils.user import delete_user
+from pong.utils.pong_game import get_game_instances, create_game, delete_game
+from pong.utils.pong_tournament import get_tournaments, create_tournament, delete_tournament
+from pong.utils.user import get_users, create_user, delete_user
+from .services import send_twilio_code, check_twilio_code
 
 
 def menu(request):
@@ -22,6 +16,22 @@ def menu(request):
 
 def game(request):
     return render(request, "game/index.html")
+
+
+class TwilioEndpoint(APIView):
+    def post(self, request, format=None):
+        to = request.data.get('to')
+        channel = request.data.get('channel')
+        code = request.data.get('code')
+
+        if to and channel:
+            status = send_twilio_code(to, channel)
+            return Response({'status': status})
+        elif to and code:
+            status = check_twilio_code(to, code)
+            return Response({'status': status})
+        else:
+            return Response({'error': 'Invalid request'}, status=400)
 
 
 class UserEndpoint(APIView):

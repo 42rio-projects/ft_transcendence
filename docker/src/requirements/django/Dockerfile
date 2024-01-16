@@ -5,8 +5,8 @@ WORKDIR /usr/src/app
 COPY tools/script.sh /
 
 RUN pip install --upgrade pip && \
-    pip install django psycopg[binary] \
-        djangorestframework
+        pip install django psycopg[binary] \
+        djangorestframework twilio
 
 # Script to wait for a host:port to be available
 RUN curl -fsSLo /wait-for-it.sh \
