@@ -10,15 +10,18 @@ from pong.utils.user import get_users, create_user, delete_user
 from .services import send_twilio_code, check_twilio_code
 
 
-def menu(request):
-    return render(request, "menu/index.html")
+class Menu(APIView):
+    def get(self, request, format=None):
+        return render(request, "menu/index.html")
 
 
-def game(request):
-    return render(request, "game/index.html")
+class Game(APIView):
+    def get(self, request, format=None):
+        return render(request, "game/index.html")
 
 
 class TwilioEndpoint(APIView):
+
     def post(self, request, format=None):
         to = request.data.get('to')
         channel = request.data.get('channel')
