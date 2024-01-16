@@ -6,7 +6,8 @@ COPY tools/script.sh /
 
 RUN pip install --upgrade pip && \
         pip install django psycopg[binary] \
-        djangorestframework twilio
+        djangorestframework djangorestframework_simplejwt \
+        twilio
 
 # Script to wait for a host:port to be available
 RUN curl -fsSLo /wait-for-it.sh \
