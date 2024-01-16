@@ -4,15 +4,56 @@ document.addEventListener("DOMContentLoaded", function() {
   var passwordInput = document.getElementById("passwordInput");
   var errorMessage = document.getElementById("errorMessage");
 
+  // Adiciona um ouvinte de evento para o campo de texto usernameInput
+  usernameInput.addEventListener("input", handleInputChange);
+  // Adiciona um ouvinte de evento para o campo de texto passwordInput
+  passwordInput.addEventListener("input", handleInputChange);
+
+  function handleInputChange() {
+      var username = usernameInput.value;
+      var password = passwordInput.value;
+
+      if (username.trim() === "" && password.trim() === "") {
+          loginButton.innerHTML = "<b>CADASTRAR</b>";
+      } else { 
+          loginButton.innerHTML = "<b>LOGIN</b>";
+      }
+  }
+
   loginButton.addEventListener("click", function() {
       var username = usernameInput.value;
       var password = passwordInput.value;
-      // Verificar credenciais (provisório)
-      if (username === "admin" && password === "42") {
-          window.location.href = "/menu";
-      } else {
-          errorMessage.textContent = "Credenciais inválidas. Tente novamente.";
+
+      if (username.trim() === "" && password.trim() === "") {
+        window.location.href = "/cadastro";
+      } else { 
+          if (username === "admin" && password === "42") {
+              window.location.href = "/menu";
+          } else {
+              errorMessage.textContent = "Credenciais inválidas. Tente novamente.";
+          }
       }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  var formButton = document.getElementById("formUploadButton");
+
+  formButton.addEventListener("click", function() {
+    var usernameForm = document.getElementById("usernameFormInput");
+    var passwordForm = document.getElementById("passwordFormInput");
+    var passwordConfirm = document.getElementById("passwordConfirmInput");
+    var errorForm = document.getElementById("errorFormMessage");
+
+    if (usernameForm.value === "" || passwordForm.value === "" || passwordConfirm.value === "") {
+      errorForm.innerHTML = "Por favor, preencha todos os campos.";
+    } else if (passwordForm.value !== passwordConfirm.value) {
+      errorForm.innerHTML = "As senhas não coincidem, tente novamente.";
+    } else {
+      errorForm.innerHTML = ""; // Limpar mensagem de erro se as senhas coincidirem
+      // Aqui você pode adicionar a lógica para enviar as informações para validaçao
+      // depois retornar para o anterior
+    }
   });
 });
 
@@ -30,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
           });
           colorOption.style.border = '3px solid #fefefe';
 
-          // FALTA ENVIAR PARA O BACKEND ESA BUDEGA
+          // FALTA guardar essa info
       });
   });
 });

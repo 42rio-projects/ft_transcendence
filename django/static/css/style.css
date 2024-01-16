@@ -367,6 +367,15 @@ body.loading-page {
 
 }
 
+
+/* Cadastro */
+.instruction {
+  color: white;
+  margin-bottom: 10%;
+  font-weight: bold;
+}
+
+
 a {
 	text-decoration: none;
 }

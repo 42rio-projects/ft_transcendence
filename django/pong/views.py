@@ -31,6 +31,9 @@ def loadscreen(request):
 def leaderboard(request):
     return render(request, "leaderboard.html")
 
+def cadastro(request):
+    return render(request, "cadastro.html")
+
 class UserEndpoint(APIView):
     def get(self, request, format=None):
         try:

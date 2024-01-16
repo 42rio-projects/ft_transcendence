@@ -7,6 +7,7 @@ urlpatterns = [
 	path("menu/", views.menu, name = "menu"),
 	path("loadscreen/", views.loadscreen, name = "loadscreen"),
 	path("leaderboard/", views.leaderboard, name = "leaderboard"),
+	path("cadastro/", views.cadastro, name = "cadastro"),
     path("api/users", views.UserEndpoint.as_view(), name="users"),
     path("api/games", views.GameEndpoint.as_view(), name="games"),
     path(
