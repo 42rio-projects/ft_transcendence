@@ -18,7 +18,8 @@ from django.urls import include, path
 from rest_framework.authtoken import views
 
 urlpatterns = [
-    path("", include("pong.urls")),
-    path("pong/", include("pong.urls")),
-    path("admin/", admin.site.urls),
+    path('', include('pong.urls')),
+    path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', views.obtain_auth_token),
 ]
