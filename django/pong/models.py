@@ -8,6 +8,12 @@ class Chat(models.Model):
     name = models.CharField(max_length=20)
     members = models.ManyToManyField(User)
 
+    def add_user(self, user):
+        self.members.add(user)
+
+    def remove_user(self, user):
+        self.members.remove(user)
+
 
 class Message(models.Model):
     content = models.CharField()

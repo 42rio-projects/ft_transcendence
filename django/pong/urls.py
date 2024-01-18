@@ -7,6 +7,8 @@ router = routers.DefaultRouter()
 router.register(r'api/users', views.UserViewSet)
 router.register(r'api/games', views.GameViewSet)
 router.register(r'api/tournaments', views.TournamentViewSet)
+router.register(r'api/chats', views.ChatViewSet)
+router.register(r'api/messages', views.MessageViewSet)
 
 urlpatterns = [
     path("", views.index, name="index"),
