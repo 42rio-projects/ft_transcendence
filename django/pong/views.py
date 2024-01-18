@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.forms.models import model_to_dict
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -46,7 +47,7 @@ class TournamentViewSet(viewsets.ModelViewSet):
 
 
 class ChatViewSet(viewsets.ModelViewSet):
-    queryset = models.Chat.objects.all()
+    queryset = models.Chat.objects.prefetch_related('messages')
     serializer_class = serializers.ChatSerializer
     permission_classes = [IsAuthenticated]
 

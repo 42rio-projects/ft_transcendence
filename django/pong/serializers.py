@@ -28,15 +28,20 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class ChatSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Chat
-        fields = '__all__'
-
-
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Message
+        fields = '__all__'
+
+
+class ChatSerializer(serializers.HyperlinkedModelSerializer):
+    messages = MessageSerializer(
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Chat
         fields = '__all__'
 
 
