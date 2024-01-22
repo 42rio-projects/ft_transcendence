@@ -16,6 +16,7 @@ urlpatterns = [
     path('game/', views.game, name='game'),
     path("loadscreen/", views.loadscreen, name="loadscreen"),
     path("leaderboard/", views.leaderboard, name="leaderboard"),
+    path("chat/", views.chat, name="chat"),
     path('', include(router.urls)),
 ]
 

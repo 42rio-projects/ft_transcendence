@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.forms.models import model_to_dict
+from django.template import loader
+from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -26,6 +27,16 @@ def loadscreen(request):
 
 def leaderboard(request):
     return render(request, "leaderboard.html")
+
+
+def chat(request):
+    chat = models.Chat.objects.get(name="Global")
+    template = loader.get_template("pong/chat.html")
+    context = {
+        "chat": chat,
+    }
+    return HttpResponse(template.render(context, request))
+    # return render(request, "pong/chat.html")
 
 
 class UserViewSet(viewsets.ModelViewSet):
