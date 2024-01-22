@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.template import loader
-from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
+import django.http as http
 import pong.serializers as serializers
 import pong.models as models
 
@@ -29,14 +29,25 @@ def leaderboard(request):
     return render(request, "leaderboard.html")
 
 
-def chat(request):
-    chat = models.Chat.objects.get(name="Global")
+def chat_list(request):
+    chats = models.Chat.objects.all()  # Should filter by chats the user is in
+    template = loader.get_template("pong/chat_list.html")
+    context = {
+        "chats": chats,
+    }
+    return http.HttpResponse(template.render(context, request))
+
+
+def chat(request, chat_id):
+    try:
+        chat = models.Chat.objects.get(id=chat_id)
+    except models.Chat.DoesNotExist:
+        raise http.Http404("Chat does not exist")
     template = loader.get_template("pong/chat.html")
     context = {
         "chat": chat,
     }
-    return HttpResponse(template.render(context, request))
-    # return render(request, "pong/chat.html")
+    return http.HttpResponse(template.render(context, request))
 
 
 class UserViewSet(viewsets.ModelViewSet):
