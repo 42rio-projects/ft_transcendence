@@ -2,7 +2,6 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from pong.models import Game, Tournament
 from django.db import IntegrityError
 from pong.utils.pong_game import get_game_instances, create_game, delete_game
 from pong.utils.pong_tournament import get_tournaments, create_tournament, delete_tournament
@@ -10,16 +9,17 @@ from pong.utils.user import get_users, create_user, delete_user
 from .services import send_twilio_code, check_twilio_code
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+import pong.models as models
 
 
 class Menu(APIView):
     def get(self, request, format=None):
-        return render(request, "menu/index.html")
+        return render(request, "menu.html")
 
 
 class Game(APIView):
     def get(self, request, format=None):
-        return render(request, "game/index.html")
+        return render(request, "game.html")
 
 
 @permission_classes([IsAuthenticated])
@@ -42,8 +42,10 @@ class TwilioEndpoint(APIView):
 def loadscreen(request):
     return render(request, "loadscreen.html")
 
+
 def leaderboard(request):
     return render(request, "leaderboard.html")
+
 
 class UserEndpoint(APIView):
     def get(self, request, format=None):
@@ -84,7 +86,7 @@ class GameEndpoint(APIView):
         try:
             create_game(request.data)
             return Response("Game created.", 200)
-        except Tournament.DoesNotExist as e:
+        except models.Tournament.DoesNotExist as e:
             return Response(str(e), 400)
         except Exception as e:
             return Response(str(e), 500)
@@ -125,7 +127,7 @@ class TournamentEndpoint(APIView):
             return Response("Tournament deleted.", 200)
         except KeyError as e:
             return Response(str(e), 400)
-        except Tournament.DoesNotExist as e:
+        except models.Tournament.DoesNotExist as e:
             return Response(str(e), 404)
         except Exception as e:
             return Response(str(e), 500)
