@@ -39,6 +39,12 @@ class TwilioEndpoint(APIView):
             return Response({'error': 'Invalid request'}, status=400)
 
 
+def loadscreen(request):
+    return render(request, "loadscreen.html")
+
+def leaderboard(request):
+    return render(request, "leaderboard.html")
+
 class UserEndpoint(APIView):
     def get(self, request, format=None):
         try:

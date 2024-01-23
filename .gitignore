@@ -1,4 +1,5 @@
 __pycache__
 .pgpass
 .env
+.env.example
 migrations
