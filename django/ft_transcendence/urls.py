@@ -19,6 +19,7 @@ from rest_framework.authtoken import views
 
 urlpatterns = [
     path('', include('pong.urls')),
+    path('', include('chat.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api-token-auth/', views.obtain_auth_token),

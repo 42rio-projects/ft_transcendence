@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from pong.models import User, Game, Tournament, Chat, Message
+from pong.models import User, Game, Tournament
 from django.contrib.auth.hashers import make_password
 
 
@@ -26,28 +26,3 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Tournament
         fields = '__all__'
-
-
-class MessageSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Message
-        fields = '__all__'
-
-
-class ChatSerializer(serializers.HyperlinkedModelSerializer):
-    messages = MessageSerializer(
-        many=True,
-        read_only=True
-    )
-
-    class Meta:
-        model = Chat
-        fields = '__all__'
-
-
-class UsernameSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=True)
-
-    class Meta:
-        model = User
-        fields = ['username']
