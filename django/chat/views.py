@@ -1,6 +1,6 @@
-import django.http as http
 import chat.serializers as serializers
-from django.template import loader
+# import django.http as http
+# from django.template import loader
 from chat.models import Chat, Message, User
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -10,12 +10,13 @@ from django.shortcuts import render
 
 
 def list(request):
-    chats = Chat.objects.all()  # Should filter by chats the user is in
-    template = loader.get_template("chat/list.html")
-    context = {
-        "chats": chats,
-    }
-    return http.HttpResponse(template.render(context, request))
+    return render(request, "chat/list.html")
+    # chats = Chat.objects.all()  # Should filter by chats the user is in
+    # template = loader.get_template("chat/list.html")
+    # context = {
+    #     "chats": chats,
+    # }
+    # return http.HttpResponse(template.render(context, request))
 
 
 def room(request, room_name):
