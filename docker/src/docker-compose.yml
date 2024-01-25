@@ -20,6 +20,13 @@ volumes:
       device: ../../postgres_data
 
 services:
+  redis:
+    container_name: redis
+    image: redis:7
+    restart: always
+    networks:
+      - ft_transcendence
+
   postgres:
     container_name: postgres
     image: postgres

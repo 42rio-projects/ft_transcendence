@@ -10,7 +10,10 @@ RUN pip install --upgrade pip && \
     pip install django \
                 psycopg[binary] \
                 djangorestframework \
-                djangorestframework-simplejwt
+                djangorestframework-simplejwt \
+				channels[daphne] \
+				channels_redis
+
 
 # Script to wait for a host:port to be available
 RUN curl -fsSLo /wait-for-it.sh \

@@ -6,27 +6,29 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import render
 
 
-def chat_list(request):
+def list(request):
     chats = Chat.objects.all()  # Should filter by chats the user is in
-    template = loader.get_template("chat/chat_list.html")
+    template = loader.get_template("chat/list.html")
     context = {
         "chats": chats,
     }
     return http.HttpResponse(template.render(context, request))
 
 
-def chat(request, chat_id):
-    try:
-        chat = Chat.objects.get(id=chat_id)
-    except Chat.DoesNotExist:
-        raise http.Http404("Chat does not exist")
-    template = loader.get_template("chat/chat.html")
-    context = {
-        "chat": chat,
-    }
-    return http.HttpResponse(template.render(context, request))
+def room(request, room_name):
+    return render(request, "chat/room.html", {"room_name": room_name})
+    # try:
+    #     chat = Chat.objects.get(id=chat_id)
+    # except Chat.DoesNotExist:
+    #     raise http.Http404("Chat does not exist")
+    # template = loader.get_template("chat/chat.html")
+    # context = {
+    #     "chat": chat,
+    # }
+    # return http.HttpResponse(template.render(context, request))
 
 
 class ChatViewSet(viewsets.ModelViewSet):
