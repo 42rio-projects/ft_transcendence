@@ -1,13 +1,11 @@
-# Paths are relative to docker-compose.yml, not Makefile
-
 volumes:
-  django_src:
-    name: django_src
+  backend_src:
+    name: backend_src
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../../django
+      device: ./backend/src
 
   postgres_data:
     name: postgres_data
@@ -15,7 +13,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ../../postgres_data
+      device: ./postgres_data
 
 networks:
   ft_transcendence:
@@ -32,24 +30,13 @@ services:
     networks:
       - ft_transcendence
 
-  adminer:
-    container_name: adminer
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
-    networks:
-      - ft_transcendence
-
-  django:
-    container_name: django
-    build: requirements/django
+  backend:
+    container_name: backend
+    build: ./backend
     env_file: .env
     restart: always
     volumes:
-      - django_src:/usr/src/app
+      - backend_src:/usr/src/app
     ports:
       - 8000:8000
     depends_on:
