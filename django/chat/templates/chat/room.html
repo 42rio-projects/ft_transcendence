@@ -21,9 +21,10 @@
       );
 
       chatSocket.onmessage = function (e) {
+        console.log(e.data);
         const data = JSON.parse(e.data);
         document.querySelector("#chat-log").value +=
-          data.user + ": " + data.message + "\n";
+          data.sender + ": " + data.content + "\n";
       };
 
       chatSocket.onclose = function (e) {
@@ -41,10 +42,10 @@
       document.querySelector("#chat-message-submit").onclick = function (e) {
         const messageInputDom = document.querySelector("#chat-message-input");
         const userDom = document.querySelector("#chat-user-input");
-        const message = messageInputDom.value;
+        const content = messageInputDom.value;
         const user = userDom.value;
         const json = JSON.stringify({
-          message: message,
+          content: content,
           user: user,
         });
         console.log(user);

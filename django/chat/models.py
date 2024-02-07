@@ -12,6 +12,9 @@ class Chat(models.Model):
     def remove_user(self, user):
         self.members.remove(user)
 
+    def __str__(self):
+        return self.name
+
 
 class Message(models.Model):
     content = models.CharField()

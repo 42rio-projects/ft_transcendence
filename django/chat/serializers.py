@@ -19,6 +19,15 @@ class ChatSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
+class MessageNestedSerializer(serializers.ModelSerializer):
+    sender = serializers.StringRelatedField()
+    chat = serializers.StringRelatedField()
+
+    class Meta:
+        model = Message
+        fields = '__all__'
+
+
 class UsernameSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True)
 
