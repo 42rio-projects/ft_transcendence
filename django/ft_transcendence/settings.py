@@ -89,12 +89,12 @@ WSGI_APPLICATION = 'ft_transcendence.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "HOST": "postgres",
-        "OPTIONS": {
-            "service": "admin",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'HOST': 'aws-0-sa-east-1.pooler.supabase.com',
+        'OPTIONS': {
+            'service': 'admin',
         },
     }
 }
