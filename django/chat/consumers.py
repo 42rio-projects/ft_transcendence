@@ -23,12 +23,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket
     async def receive(self, text_data):
-        data_json = json.loads(text_data)
-        content = data_json['content']
-        user = await get_user(data_json['user'])
-        chat = await get_chat()
-        message = await create_message(content, user, chat)
-        message_data = await message_to_dict(message)
+        try:
+            data_json = json.loads(text_data)
+            content = data_json['content']
+            user = await get_user(data_json['user'])
+            chat = await get_chat()
+            message = await create_message(content, user, chat)
+            message_data = await message_to_dict(message)
+        except Exception as e:
+            print(e)
+            await self.send(text_data=json.dumps({
+                'type': 'error',
+                'content': 'Unable to send message.',
+            }))
+            return
         message_data['type'] = 'chat.message'
 
         # Send message to room group

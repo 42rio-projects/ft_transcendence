@@ -23,8 +23,12 @@
       chatSocket.onmessage = function (e) {
         console.log(e.data);
         const data = JSON.parse(e.data);
-        document.querySelector("#chat-log").value +=
-          data.sender + ": " + data.content + "\n";
+        if (data.type == "error") {
+          console.error("Unable to send message");
+        } else {
+          document.querySelector("#chat-log").value +=
+            data.sender + ": " + data.content + "\n";
+        }
       };
 
       chatSocket.onclose = function (e) {
@@ -48,8 +52,6 @@
           content: content,
           user: user,
         });
-        console.log(user);
-        console.log(json);
         chatSocket.send(json);
         messageInputDom.value = "";
       };
