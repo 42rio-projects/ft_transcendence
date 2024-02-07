@@ -93,7 +93,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
-        'HOST': 'db.ubretkwfwjuhaqnotzky.supabase.co',
+        'HOST': 'aws-0-sa-east-1.pooler.supabase.com',
         'OPTIONS': {
             'service': 'admin',
         },
