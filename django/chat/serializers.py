@@ -2,7 +2,10 @@ from rest_framework import serializers
 from chat.models import User, Message, Chat
 
 
-class MessageSerializer(serializers.HyperlinkedModelSerializer):
+class MessageSerializer(serializers.ModelSerializer):
+    sender = serializers.StringRelatedField()
+    chat = serializers.StringRelatedField()
+
     class Meta:
         model = Message
         fields = '__all__'
@@ -16,15 +19,6 @@ class ChatSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Chat
-        fields = '__all__'
-
-
-class MessageNestedSerializer(serializers.ModelSerializer):
-    sender = serializers.StringRelatedField()
-    chat = serializers.StringRelatedField()
-
-    class Meta:
-        model = Message
         fields = '__all__'
 
 

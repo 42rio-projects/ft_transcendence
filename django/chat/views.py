@@ -5,7 +5,7 @@ from chat.models import Chat, Message, User
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import render
 
 
@@ -61,6 +61,6 @@ class ChatViewSet(viewsets.ModelViewSet):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    queryset = Message.objects.all()
+    queryset = Message.objects.all().order_by('-date')
     serializer_class = serializers.MessageSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]

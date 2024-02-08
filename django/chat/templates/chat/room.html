@@ -5,13 +5,15 @@
     <meta charset="utf-8" />
     <title>Chat Room</title>
   </head>
-  <body>
+  <body onload="initialize()">
     Username:<input id="chat-user-input" type="text" size="30" /><br />
     <textarea id="chat-log" cols="100" rows="20"></textarea><br />
     Message:<input id="chat-message-input" type="text" size="77" /><br />
     <input id="chat-message-submit" type="button" value="Send" />
+    <input id="load-previous-messages" type="button" value="Load Previous" />
     {{ room_name|json_script:"room-name" }}
     <script>
+      message_page = 1;
       const roomName = JSON.parse(
         document.getElementById("room-name").textContent,
       );
@@ -21,13 +23,12 @@
       );
 
       chatSocket.onmessage = function (e) {
-        console.log(e.data);
         const data = JSON.parse(e.data);
         if (data.type == "error") {
           console.error("Unable to send message");
         } else {
           document.querySelector("#chat-log").value +=
-            data.sender + ": " + data.content + "\n";
+            `[${data.date}]-${data.sender}: ${data.content}\n`;
         }
       };
 
@@ -54,6 +55,36 @@
         });
         chatSocket.send(json);
         messageInputDom.value = "";
+      };
+
+      async function getMessages() {
+        const response = await fetch(
+          "http://" +
+            window.location.host +
+            "/api/message/?page=" +
+            message_page,
+        );
+        try {
+          const data = await response.json();
+          text = "";
+          for (message of data.results) {
+            text = `[${message.date}]-${message.sender}: ${message.content}\n${text}`;
+          }
+          chat = document.querySelector("#chat-log");
+          chat.value = text + chat.value;
+          message_page++;
+        } catch (e) {
+          console.log("No previous message to be loaded");
+        }
+      }
+
+      async function initialize() {
+        document.querySelector("#chat-log").value = "";
+        getMessages();
+      }
+
+      document.querySelector("#load-previous-messages").onclick = function (e) {
+        getMessages();
       };
     </script>
   </body>

@@ -1,7 +1,7 @@
 import json
 import chat.models as models
 from channels.generic.websocket import AsyncWebsocketConsumer
-from chat.serializers import MessageNestedSerializer
+from chat.serializers import MessageSerializer
 from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
 
@@ -71,4 +71,4 @@ def create_message(content, user, chat):
 
 @sync_to_async
 def message_to_dict(message):
-    return MessageNestedSerializer(message).data
+    return MessageSerializer(message).data
