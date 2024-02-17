@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Chat(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=301, unique=True)
     members = models.ManyToManyField(User)
+    private = models.BooleanField(default=True)
 
     def add_user(self, user):
         self.members.add(user)
