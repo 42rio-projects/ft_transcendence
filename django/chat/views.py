@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import render
+from django.db.models import Prefetch
 
 
 def list(request):
@@ -33,7 +34,7 @@ def room(request, room_name):
 
 
 class ChatViewSet(viewsets.ModelViewSet):
-    queryset = Chat.objects.prefetch_related('messages')
+    queryset = Chat.objects.all()
     serializer_class = serializers.ChatSerializer
     permission_classes = [IsAuthenticated]
 
@@ -61,6 +62,12 @@ class ChatViewSet(viewsets.ModelViewSet):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    queryset = Message.objects.all().order_by('-date')
     serializer_class = serializers.MessageSerializer
     permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        queryset = Message.objects.all().order_by('-date')
+        chat_name = self.request.query_params.get('chat')
+        if chat_name is not None:
+            queryset = queryset.filter(chat=chat_name)
+        return queryset

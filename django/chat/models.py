@@ -8,6 +8,10 @@ class Chat(models.Model):
     private = models.BooleanField(default=True)
 
     def add_user(self, user):
+        if self.private and self.members.count() > 2:
+            raise Exception(
+                "Tried to add more than 2 members on a private chat"
+            )
         self.members.add(user)
 
     def remove_user(self, user):

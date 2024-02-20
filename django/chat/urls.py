@@ -5,7 +5,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 
 router.register(r'api/chat', views.ChatViewSet)
-router.register(r'api/message', views.MessageViewSet)
+router.register(r'api/message', views.MessageViewSet, basename='message')
 
 urlpatterns = [
     path("chat/", views.list, name="list"),

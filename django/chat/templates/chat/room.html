@@ -52,6 +52,7 @@
         const json = JSON.stringify({
           content: content,
           user: user,
+          chat_name: roomName,
         });
         chatSocket.send(json);
         messageInputDom.value = "";
@@ -62,7 +63,9 @@
           "http://" +
             window.location.host +
             "/api/message/?page=" +
-            message_page,
+            message_page +
+            "&room_name=" +
+            roomName,
         );
         try {
           const data = await response.json();

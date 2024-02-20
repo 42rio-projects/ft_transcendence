@@ -12,14 +12,9 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class ChatSerializer(serializers.HyperlinkedModelSerializer):
-    messages = MessageSerializer(
-        many=True,
-        read_only=True
-    )
-
     class Meta:
         model = Chat
-        fields = '__all__'
+        fields = ['name', 'private', 'members']
 
 
 class UsernameSerializer(serializers.ModelSerializer):

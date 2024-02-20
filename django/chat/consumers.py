@@ -27,7 +27,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             data_json = json.loads(text_data)
             content = data_json['content']
             user = await get_user(data_json['user'])
-            chat = await get_chat()
+            chat = await get_chat(data_json['chat_name'])
             message = await create_message(content, user, chat)
             message_data = await message_to_dict(message)
         except Exception as e:
@@ -49,8 +49,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 @database_sync_to_async
-def get_chat():
-    chat = models.Chat.objects.get(name='Global')
+def get_chat(chat_name):
+    chat = models.Chat.objects.get(name='chat_name')
     return chat
 
 
