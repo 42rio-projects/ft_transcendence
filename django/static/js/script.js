@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       if (username.trim() === "" && password.trim() === "") {
           loginButton.innerHTML = "<b>CADASTRAR</b>";
-      } else { 
+      } else {
           loginButton.innerHTML = "<b>LOGIN</b>";
       }
   }
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       if (username.trim() === "" && password.trim() === "") {
         window.location.href = "/cadastro";
-      } else { 
+      } else {
           if (username === "admin" && password === "42") {
               window.location.href = "/menu";
           } else {
@@ -49,10 +49,17 @@ document.addEventListener("DOMContentLoaded", function() {
       errorForm.innerHTML = "Por favor, preencha todos os campos.";
     } else if (passwordForm.value !== passwordConfirm.value) {
       errorForm.innerHTML = "As senhas não coincidem, tente novamente.";
+    } else if (passwordForm.value.length  < 6) {
+      errorForm.innerHTML = "A senha deve ter no minimo 6 caracteres";
     } else {
       errorForm.innerHTML = ""; // Limpar mensagem de erro se as senhas coincidirem
       // Aqui você pode adicionar a lógica para enviar as informações para validaçao
       // depois retornar para o anterior
+      alert("Usuário " + usernameForm.value + " cadastrado com sucesso!");
+      // Limpar form
+      usernameForm.value = "";
+      passwordForm.value = "";
+      passwordConfirm.value = "";
     }
   });
 });
@@ -106,3 +113,39 @@ function pad(number) {
 window.onload = function () {
   trackTimeOnPage();
 };
+
+
+// chat buble
+// document.addEventListener("DOMContentLoaded", function() {
+//   var chatBubble = document.querySelector(".chat-bubble");
+
+//   chatBubble.addEventListener("click", function() {
+//     // Aqui você pode adicionar o código para exibir o chat
+//     // Por exemplo, mostrar um elemento de chat que estava oculto
+//     console.log("Bolha de chat clicada!");
+//   });
+// });
+
+const chatBubble = document.getElementById("chatBubble");
+const chatContent = document.getElementById("chatContent");
+const expandButton = document.getElementById("expandButton");
+
+// Função para expandir a bolha
+function expandChat() {
+  chatBubble.classList.add("expanded");
+  chatContent.classList.add("visible");
+  expandButton.classList.add("hidden");
+}
+
+// Função para contrair a bolha
+function collapseChat() {
+  chatBubble.classList.remove("expanded");
+  chatContent.classList.remove("visible");
+  expandButton.classList.remove("hidden");
+}
+
+// Adiciona evento de clique ao botão de expansão
+expandButton.addEventListener("click", expandChat);
+
+// Adiciona evento de clique à área de conteúdo para contrair a bolha (opcional)
+chatContent.addEventListener("click", collapseChat);
