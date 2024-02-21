@@ -1,23 +1,22 @@
 from django.shortcuts import render
+from .models import User, Game, Tournament
+from rest_framework import viewsets, permissions
+from .serializers import UserSerializer, GameSerializer, TournamentSerializer
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from django.db import IntegrityError
-from pong.utils.pong_game import get_game_instances, create_game, delete_game
-from pong.utils.pong_tournament import get_tournaments, create_tournament, delete_tournament
-from pong.utils.user import get_users, create_user, delete_user
 from .services import send_twilio_code, check_twilio_code
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
-import pong.models as models
+from rest_framework.decorators import permission_classes, api_view
 
 
-class Menu(APIView):
+@permission_classes((permissions.AllowAny,))
+class MenuView(APIView):
     def get(self, request, format=None):
         return render(request, "menu.html")
 
 
-class Game(APIView):
+@permission_classes((permissions.AllowAny,))
+class GameView(APIView):
     def get(self, request, format=None):
         return render(request, "game.html")
 
@@ -47,87 +46,19 @@ def leaderboard(request):
     return render(request, "leaderboard.html")
 
 
-class UserEndpoint(APIView):
-    def get(self, request, format=None):
-        try:
-            return Response(get_users(), 200)
-        except Exception as e:
-            return Response(str(e), 500)
-
-    def post(self, request, format=None):
-        try:
-            create_user(request.data)
-            return Response("User created.", 200)
-        except IntegrityError as e:
-            return Response(str(e), 409)
-        except Exception as e:
-            return Response(str(e), 500)
-
-    def delete(self, request, format=None):
-        try:
-            delete_user(request.data)
-            return Response("User deleted.", 200)
-        except IntegrityError as e:
-            return Response(str(e), 403)
-        except User.DoesNotExist as e:
-            return Response(str(e), 404)
-        except Exception as e:
-            return Response(str(e), 500)
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
 
-class GameEndpoint(APIView):
-    def get(self, request, format=None):
-        try:
-            return Response(get_game_instances(), 200)
-        except Exception as e:
-            return Response(str(e), 500)
-
-    def post(self, request, format=None):
-        try:
-            create_game(request.data)
-            return Response("Game created.", 200)
-        except models.Tournament.DoesNotExist as e:
-            return Response(str(e), 400)
-        except Exception as e:
-            return Response(str(e), 500)
-
-    def delete(self, request, format=None):
-        try:
-            delete_game(request.data)
-            return Response("Game deleted.", 200)
-        except KeyError as e:
-            return Response(str(e), 400)
-        except Game.DoesNotExist as e:
-            return Response(str(e), 404)
-        except Exception as e:
-            return Response(str(e), 500)
+class GameViewSet(viewsets.ModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    permission_classes = [IsAuthenticated]
 
 
-class TournamentEndpoint(APIView):
-    def get(self, request, format=None):
-        try:
-            return Response(get_tournaments())
-        except Exception as e:
-            return Response(str(e), 500)
-
-    def post(self, request, format=None):
-        try:
-            create_tournament(request.data)
-            return Response("Tournament created.", 200)
-        except KeyError as e:
-            return Response(str(e), 400)
-        except IntegrityError as e:
-            return Response(str(e), 409)
-        except Exception as e:
-            return Response(str(e), 500)
-
-    def delete(self, request, format=None):
-        try:
-            delete_tournament(request.data)
-            return Response("Tournament deleted.", 200)
-        except KeyError as e:
-            return Response(str(e), 400)
-        except models.Tournament.DoesNotExist as e:
-            return Response(str(e), 404)
-        except Exception as e:
-            return Response(str(e), 500)
+class TournamentViewSet(viewsets.ModelViewSet):
+    queryset = Tournament.objects.all()
+    serializer_class = TournamentSerializer
+    permission_classes = [IsAuthenticated]
