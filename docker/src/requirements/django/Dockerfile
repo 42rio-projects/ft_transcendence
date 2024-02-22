@@ -9,6 +9,8 @@ RUN pip install --upgrade pip && \
                 psycopg[binary] \
                 djangorestframework \
                 djangorestframework_simplejwt \
+				channels[daphne] \
+				channels_redis \
                 twilio
 
 # Script to wait for a host:port to be available

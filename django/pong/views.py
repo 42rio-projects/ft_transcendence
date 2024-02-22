@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from .models import User, Game, Tournament
+import pong.serializers as serializers
+import pong.models as models
 from rest_framework import viewsets, permissions
-from .serializers import UserSerializer, GameSerializer, TournamentSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .services import send_twilio_code, check_twilio_code
-from rest_framework.decorators import permission_classes, api_view
+from rest_framework.decorators import permission_classes
 
 
 @permission_classes((permissions.AllowAny,))
@@ -47,18 +47,18 @@ def leaderboard(request):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = models.User.objects.all()
+    serializer_class = serializers.UserSerializer
     permission_classes = [IsAuthenticated]
 
 
 class GameViewSet(viewsets.ModelViewSet):
-    queryset = Game.objects.all()
-    serializer_class = GameSerializer
+    queryset = models.Game.objects.all()
+    serializer_class = serializers.GameSerializer
     permission_classes = [IsAuthenticated]
 
 
 class TournamentViewSet(viewsets.ModelViewSet):
-    queryset = Tournament.objects.all()
-    serializer_class = TournamentSerializer
+    queryset = models.Tournament.objects.all()
+    serializer_class = serializers.TournamentSerializer
     permission_classes = [IsAuthenticated]
