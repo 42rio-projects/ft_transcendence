@@ -129,12 +129,14 @@ window.onload = function () {
 const chatBubble = document.getElementById("chatBubble");
 const chatContent = document.getElementById("chatContent");
 const expandButton = document.getElementById("expandButton");
+const collapseButton = document.getElementById("collapseButton");
 
 // Função para expandir a bolha
 function expandChat() {
   chatBubble.classList.add("expanded");
   chatContent.classList.add("visible");
   expandButton.classList.add("hidden");
+  collapseButton.classList.add("visible");
 }
 
 // Função para contrair a bolha
@@ -142,10 +144,11 @@ function collapseChat() {
   chatBubble.classList.remove("expanded");
   chatContent.classList.remove("visible");
   expandButton.classList.remove("hidden");
+  collapseButton.classList.remove("visible");
 }
 
 // Adiciona evento de clique ao botão de expansão
 expandButton.addEventListener("click", expandChat);
 
 // Adiciona evento de clique à área de conteúdo para contrair a bolha (opcional)
-chatContent.addEventListener("click", collapseChat);
+collapseButton.addEventListener("click", collapseChat);

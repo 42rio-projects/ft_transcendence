@@ -6,7 +6,6 @@
 	box-sizing: border-box;
 	font-family: 'Roboto', sans-serif;
 	transition: all 0.4s ease;
-	;
 }
 
 body {
@@ -191,7 +190,7 @@ nav li {
 	flex-direction: column; /* Empilhar os botões verticalmente */
 	align-items: center;
   }
-  
+
   .button {
   display: flex;
 	text-align: center;
@@ -207,7 +206,7 @@ nav li {
   border-radius: 10px; /* Cantos arredondados */
   box-shadow: 0 5px 40px rgba(20, 180, 243, 0.404);
   }
-  
+
   .button:hover {
 	background-color: #de0ee6; /* Cor de fundo ao passar o mouse */
 	transform: scale(1.1); /* Aumenta a escala ao passar o mouse */
@@ -381,8 +380,9 @@ body.loading-page {
   right: 20px;
   width: 60px;
   height: 60px;
-  background-color: #25d366;
+  background-color: #d325ad;
   z-index: 1000;
+  border-radius: 5px;
   transition: all 0.3s ease-in-out;
 }
 
@@ -396,9 +396,9 @@ body.loading-page {
   height: 100%;
   display: none;
   /* padding: 10px; */
-  background-color: #030000;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  background-color: #020202;
+  border-radius: 5px;
 }
 
 #chatContent.visible {
@@ -422,10 +422,9 @@ body.loading-page {
   display: flex;
   align-items: center;
   gap: 10px;
-  /* position: fixed;
-  bottom: 0;
-  left: 0; */
-  width: 100%;
+  /* width: 100%; */
+  position: sticky;
+  bottom:0;
  }
 
  .chat-input {
@@ -450,6 +449,24 @@ body.loading-page {
   font-size: 1rem;
  }
 
+#collapseButton {
+ display: hidden;
+}
+
+#collapseButton.visible {
+  width: 3vh;
+  height: 1.5vh;
+  position: absolute;
+  top: 0;
+  border-radius: 10px;
+  z-index: 2;
+  margin-top: 3%;
+  background-color: #f2f2f2;
+}
+#collapseButton.visible:hover {
+  cursor: pointer;
+  background-color: rgb(243, 13, 13);
+}
 
 #expandButton {
   position: absolute;
@@ -457,14 +474,19 @@ body.loading-page {
   right: 10px; */
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: rgb(255, 255, 255);
   background-image: url(https://logodownload.org/wp-content/uploads/2015/04/whatsapp-logo-png-0-2048x2048.png);
   background-size: cover;
   background-position: center;
   font-size: 16px;
   text-align: center;
   cursor: pointer;
+  border-radius: 10px;
   transition: all 0.3s ease-in-out;
+}
+
+#expandButton:hover {
+  background-color: #000;
 }
 
 #expandButton.hidden {
@@ -488,9 +510,23 @@ body.loading-page {
   align-self: flex-end;
 }
 
+.messageSelfDM {
+  background-color: rgb(27, 205, 228);
+  color: #000;
+  border-radius: 10px 10px 0 10px;
+  align-self: flex-end;
+}
+
 .messageOthers {
   background-color: #333;
   color: #f2f2f2;
+  border-radius: 0 10px 10px 10px;
+  align-self: flex-start;
+}
+
+.messageDM {
+  background-color: rgb(27, 205, 228);
+  color: #000;
   border-radius: 0 10px 10px 10px;
   align-self: flex-start;
 }
@@ -500,7 +536,6 @@ body.loading-page {
   margin-bottom: 2px;
   font-weight: 700;
   color: #25d366;
-
 }
 
 /* Geral */
