@@ -21,4 +21,4 @@ class Game(models.Model):
     last_update = models.DateField(auto_now=True)
     tournament_round = models.PositiveSmallIntegerField(null=True)
     tournament = models.ForeignKey(
-        Tournament, null=True, on_delete=models.SET_NULL, related_name="games")
+        Tournament, null=True, on_delete=models.SET_NULL, related_name='games')

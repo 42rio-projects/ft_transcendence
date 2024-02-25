@@ -1,6 +1,13 @@
 from django.urls import path
-from . import views
+from rest_framework import routers
+import pong.views as views
 from rest_framework_simplejwt import views as jwt_views
+
+router = routers.DefaultRouter()
+
+router.register(r'api/users', views.UserViewSet)
+router.register(r'api/games', views.GameViewSet)
+router.register(r'api/tournaments', views.TournamentViewSet)
 
 urlpatterns = [
     path("", views.Index.as_view(), name="index"),
@@ -13,12 +20,7 @@ urlpatterns = [
     path("menu/", views.Menu.as_view(), name="menu"),
     path("loadscreen/", views.Loadscreen.as_view(), name="loadscreen"),
     path("leaderboard/", views.Leaderboard.as_view(), name="leaderboard"),
-	path("cadastro/", views.Cadastro.as_view, name = "cadastro"),
-    path("api/users", views.UserEndpoint.as_view(), name="users"),
-    path("api/games", views.GameEndpoint.as_view(), name="games"),
-    path(
-        "api/tournaments",
-        views.TournamentEndpoint.as_view(),
-        name="tournaments"
-    ),
+	path("cadastro/", views.Cadastro.as_view(), name = "cadastro"),
 ]
+
+urlpatterns += router.urls

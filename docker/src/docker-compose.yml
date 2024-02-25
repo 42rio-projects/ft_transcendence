@@ -1,4 +1,6 @@
-# Paths are relative to docker-compose.yml, not Makefile
+networks:
+  ft_transcendence:
+    name: ft_transcendence
 
 volumes:
   django_src:
@@ -17,11 +19,14 @@ volumes:
       o: bind
       device: ../../postgres_data
 
-networks:
-  ft_transcendence:
-    name: ft_transcendence
-
 services:
+  redis:
+    container_name: redis
+    image: redis:7
+    restart: always
+    networks:
+      - ft_transcendence
+
   postgres:
     container_name: postgres
     image: postgres
@@ -45,7 +50,7 @@ services:
 
   django:
     container_name: django
-    build: requirements/django
+    build: ./requirements/django
     env_file: .env
     restart: always
     volumes:
