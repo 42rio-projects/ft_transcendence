@@ -105,7 +105,6 @@ WSGI_APPLICATION = 'ft_transcendence.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-# DEIXADO SQLITE3 PARA TESTES
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
