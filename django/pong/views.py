@@ -11,16 +11,29 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 import pong.models as models
 
+class Index(APIView):
+    def get(self,request, format=None):
+        return render(request, "index.html")
 
 class Menu(APIView):
     def get(self, request, format=None):
         return render(request, "menu.html")
 
-
 class Game(APIView):
     def get(self, request, format=None):
         return render(request, "game.html")
 
+class Loadscreen(APIView):
+    def get(self, request, format=None):
+        return render(request, "loadscreen.html")
+
+class Leaderboard(APIView):
+    def get(self, request, format=None):
+        return render(request, "leaderboard.html")
+
+class Cadastro(APIView):
+    def get(self,request, format=None):
+        return render(request, "cadastro.html")
 
 @permission_classes([IsAuthenticated])
 class TwilioEndpoint(APIView):
@@ -37,17 +50,6 @@ class TwilioEndpoint(APIView):
             return Response({'status': status})
         else:
             return Response({'error': 'Invalid request'}, status=400)
-
-
-def loadscreen(request):
-    return render(request, "loadscreen.html")
-
-
-def leaderboard(request):
-    return render(request, "leaderboard.html")
-
-def cadastro(request):
-    return render(request, "cadastro.html")
 
 class UserEndpoint(APIView):
     def get(self, request, format=None):
