@@ -1,42 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-  var loginButton = document.getElementById("loginButton");
-  var usernameInput = document.getElementById("usernameInput");
-  var passwordInput = document.getElementById("passwordInput");
-  var errorMessage = document.getElementById("errorMessage");
-
-  // Adiciona um ouvinte de evento para o campo de texto usernameInput
-  usernameInput.addEventListener("input", handleInputChange);
-  // Adiciona um ouvinte de evento para o campo de texto passwordInput
-  passwordInput.addEventListener("input", handleInputChange);
-
-  function handleInputChange() {
-      var username = usernameInput.value;
-      var password = passwordInput.value;
-
-      if (username.trim() === "" && password.trim() === "") {
-          loginButton.innerHTML = "<b>CADASTRAR</b>";
-      } else {
-          loginButton.innerHTML = "<b>LOGIN</b>";
-      }
-  }
-
-  loginButton.addEventListener("click", function() {
-      var username = usernameInput.value;
-      var password = passwordInput.value;
-
-      if (username.trim() === "" && password.trim() === "") {
-        window.location.href = "/cadastro";
-      } else {
-          if (username === "admin" && password === "42") {
-              window.location.href = "/menu";
-          } else {
-              errorMessage.textContent = "Credenciais inválidas. Tente novamente.";
-          }
-      }
-  });
-});
-
-document.addEventListener("DOMContentLoaded", function() {
   var formButton = document.getElementById("formUploadButton");
 
   formButton.addEventListener("click", function() {

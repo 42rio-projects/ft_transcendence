@@ -22,7 +22,7 @@ class Chat(models.Model):
 
 
 class Message(models.Model):
-    content = models.CharField()
+    content = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
     sender = models.ForeignKey(
         User, null=True, on_delete=models.SET_NULL, related_name="messages"

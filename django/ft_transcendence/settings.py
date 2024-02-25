@@ -39,7 +39,8 @@ REST_FRAMEWORK = {
 }
 
 INSTALLED_APPS = [
-    'daphne',
+    # 'daphne',
+	'login.apps.LoginConfig',
     'pong',
     'chat',
     'django.contrib.admin',
@@ -48,9 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'rest_framework_simplejwt',
+    # 'rest_framework',
+    # 'rest_framework.authtoken',
+    # 'rest_framework_simplejwt',
 ]
 
 SIMPLE_JWT = {
@@ -104,7 +105,7 @@ WSGI_APPLICATION = 'ft_transcendence.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
+# DEIXADO SQLITE3 PARA TESTES
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -172,3 +173,7 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'menu'
+LOGOUT_REDIRECT_URL = '/'

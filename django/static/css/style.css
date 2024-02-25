@@ -57,6 +57,12 @@ nav li {
   border-radius: 10px; /* Cantos arredondados */
 }
 
+.form p {
+  margin: 15px 0 0;
+  color: #f2f2f2;
+  font-size: 12px;
+}
+
 .form input {
   font-family: "Roboto", cursive; /* Fonte retrô arcade */
   outline: 0;
@@ -85,6 +91,11 @@ nav li {
   transition: all 0.3s ease;
   cursor: pointer;
   border-radius: 5px; /* Cantos arredondados */
+}
+
+.form button a {
+  text-decoration: none;
+  color: #ffffff;
 }
 
 .form button:hover, .form button:active, .form button:focus {
@@ -206,6 +217,7 @@ nav li {
   border-radius: 10px; /* Cantos arredondados */
   box-shadow: 0 5px 40px rgba(20, 180, 243, 0.404);
   }
+
 
   .button:hover {
 	background-color: #de0ee6; /* Cor de fundo ao passar o mouse */
@@ -367,10 +379,11 @@ body.loading-page {
 }
 
 /* Cadastro */
-.instruction {
+.instruction{
   color: white;
-  margin-bottom: 10%;
+  margin-bottom: 50%;
   font-weight: bold;
+  font-size: 2vh;
 }
 
 /* Chat buble */
