@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.contrib.auth.hashers import make_password
 
 NO_USERS = "There are no users on the database."
 NO_USERNAME = "Error: No username was supplied."
@@ -26,7 +27,10 @@ def create_user(data):
     elif "password" not in data:
         raise KeyError(NO_PASSWORD)
     try:
-        user = User(username=data["username"], password=data["password"])
+        username = data.get('username')
+        password = data.get('password')
+        hashed_password = make_password(password)
+        user = User(username=username, password=hashed_password)
         user.save()
     except IntegrityError as e:
         raise IntegrityError(DUPLICATE) from e
