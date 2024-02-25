@@ -4,15 +4,63 @@ document.addEventListener("DOMContentLoaded", function() {
   var passwordInput = document.getElementById("passwordInput");
   var errorMessage = document.getElementById("errorMessage");
 
+  // Adiciona um ouvinte de evento para o campo de texto usernameInput
+  usernameInput.addEventListener("input", handleInputChange);
+  // Adiciona um ouvinte de evento para o campo de texto passwordInput
+  passwordInput.addEventListener("input", handleInputChange);
+
+  function handleInputChange() {
+      var username = usernameInput.value;
+      var password = passwordInput.value;
+
+      if (username.trim() === "" && password.trim() === "") {
+          loginButton.innerHTML = "<b>CADASTRAR</b>";
+      } else {
+          loginButton.innerHTML = "<b>LOGIN</b>";
+      }
+  }
+
   loginButton.addEventListener("click", function() {
       var username = usernameInput.value;
       var password = passwordInput.value;
-      // Verificar credenciais (provisório)
-      if (username === "admin" && password === "42") {
-          window.location.href = "/menu";
+
+      if (username.trim() === "" && password.trim() === "") {
+        window.location.href = "/cadastro";
       } else {
-          errorMessage.textContent = "Credenciais inválidas. Tente novamente.";
+          if (username === "admin" && password === "42") {
+              window.location.href = "/menu";
+          } else {
+              errorMessage.textContent = "Credenciais inválidas. Tente novamente.";
+          }
       }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  var formButton = document.getElementById("formUploadButton");
+
+  formButton.addEventListener("click", function() {
+    var usernameForm = document.getElementById("usernameFormInput");
+    var passwordForm = document.getElementById("passwordFormInput");
+    var passwordConfirm = document.getElementById("passwordConfirmInput");
+    var errorForm = document.getElementById("errorFormMessage");
+
+    if (usernameForm.value === "" || passwordForm.value === "" || passwordConfirm.value === "") {
+      errorForm.innerHTML = "Por favor, preencha todos os campos.";
+    } else if (passwordForm.value !== passwordConfirm.value) {
+      errorForm.innerHTML = "As senhas não coincidem, tente novamente.";
+    } else if (passwordForm.value.length  < 6) {
+      errorForm.innerHTML = "A senha deve ter no minimo 6 caracteres";
+    } else {
+      errorForm.innerHTML = ""; // Limpar mensagem de erro se as senhas coincidirem
+      // Aqui você pode adicionar a lógica para enviar as informações para validaçao
+      // depois retornar para o anterior
+      alert("Usuário " + usernameForm.value + " cadastrado com sucesso!");
+      // Limpar form
+      usernameForm.value = "";
+      passwordForm.value = "";
+      passwordConfirm.value = "";
+    }
   });
 });
 
@@ -30,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
           });
           colorOption.style.border = '3px solid #fefefe';
 
-          // FALTA ENVIAR PARA O BACKEND ESA BUDEGA
+          // FALTA guardar essa info
       });
   });
 });
@@ -65,3 +113,42 @@ function pad(number) {
 window.onload = function () {
   trackTimeOnPage();
 };
+
+
+// chat buble
+// document.addEventListener("DOMContentLoaded", function() {
+//   var chatBubble = document.querySelector(".chat-bubble");
+
+//   chatBubble.addEventListener("click", function() {
+//     // Aqui você pode adicionar o código para exibir o chat
+//     // Por exemplo, mostrar um elemento de chat que estava oculto
+//     console.log("Bolha de chat clicada!");
+//   });
+// });
+
+const chatBubble = document.getElementById("chatBubble");
+const chatContent = document.getElementById("chatContent");
+const expandButton = document.getElementById("expandButton");
+const collapseButton = document.getElementById("collapseButton");
+
+// Função para expandir a bolha
+function expandChat() {
+  chatBubble.classList.add("expanded");
+  chatContent.classList.add("visible");
+  expandButton.classList.add("hidden");
+  collapseButton.classList.add("visible");
+}
+
+// Função para contrair a bolha
+function collapseChat() {
+  chatBubble.classList.remove("expanded");
+  chatContent.classList.remove("visible");
+  expandButton.classList.remove("hidden");
+  collapseButton.classList.remove("visible");
+}
+
+// Adiciona evento de clique ao botão de expansão
+expandButton.addEventListener("click", expandChat);
+
+// Adiciona evento de clique à área de conteúdo para contrair a bolha (opcional)
+collapseButton.addEventListener("click", collapseChat);
