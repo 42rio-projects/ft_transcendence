@@ -1,24 +1,63 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
-
 
 class Tournament(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    beginning = models.DateField(auto_now_add=True)
-    last_update = models.DateField(auto_now=True)
+    date = models.DateField(auto_now_add=True)
+    players = models.ManyToManyField(User, related_name='tournaments')
+    winner = models.ForeignKey(
+        User,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='championships'
+    )
+
+
+class Score(models.Model):
+    p1_points = models.PositiveSmallIntegerField(default=0)
+    p2_points = models.PositiveSmallIntegerField(default=0)
+
+
+class Round(models.Model):
+    tournament = models.ForeignKey(
+        Tournament,
+        related_name='rounds',
+        on_delete=models.CASCADE
+    )
+    number = models.PositiveSmallIntegerField()
+
+
+def default_score():
+    score = Score()
+    score.save()
+    return score.pk
 
 
 class Game(models.Model):
-    winner = models.ForeignKey(
-        User, null=True, on_delete=models.SET_NULL, related_name='wins')
-    loser = models.ForeignKey(
-        User, null=True, on_delete=models.SET_NULL, related_name='losses')
-    winner_points = models.PositiveSmallIntegerField()
-    loser_points = models.PositiveSmallIntegerField()
-    beginning = models.DateField(auto_now_add=True)
-    last_update = models.DateField(auto_now=True)
-    tournament_round = models.PositiveSmallIntegerField(null=True)
-    tournament = models.ForeignKey(
-        Tournament, null=True, on_delete=models.SET_NULL, related_name='games')
+    player_1 = models.ForeignKey(
+        User,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='home_games'
+    )
+    player_2 = models.ForeignKey(
+        User,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='away_games'
+    )
+    score = models.OneToOneField(
+        Score,
+        default=default_score,
+        related_name='game',
+        on_delete=models.CASCADE
+    )
+    round = models.ForeignKey(
+        Round,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='games'
+    )
+    date = models.DateField(auto_now_add=True)
+    # add methods to return winner and loser
