@@ -14,11 +14,6 @@ class Tournament(models.Model):
     )
 
 
-class Score(models.Model):
-    p1_points = models.PositiveSmallIntegerField(default=0)
-    p2_points = models.PositiveSmallIntegerField(default=0)
-
-
 class Round(models.Model):
     tournament = models.ForeignKey(
         Tournament,
@@ -26,12 +21,6 @@ class Round(models.Model):
         on_delete=models.CASCADE
     )
     number = models.PositiveSmallIntegerField()
-
-
-def default_score():
-    score = Score()
-    score.save()
-    return score.pk
 
 
 class Game(models.Model):
@@ -47,17 +36,23 @@ class Game(models.Model):
         on_delete=models.SET_NULL,
         related_name='away_games'
     )
-    score = models.OneToOneField(
-        Score,
-        default=default_score,
-        related_name='game',
-        on_delete=models.CASCADE
-    )
     round = models.ForeignKey(
         Round,
         null=True,
+        blank=True,
+        default=None,
         on_delete=models.SET_NULL,
         related_name='games'
     )
     date = models.DateField(auto_now_add=True)
     # add methods to return winner and loser
+
+
+class Score(models.Model):
+    p1_points = models.PositiveSmallIntegerField(default=0)
+    p2_points = models.PositiveSmallIntegerField(default=0)
+    game = models.OneToOneField(
+        Game,
+        related_name='score',
+        on_delete=models.CASCADE
+    )
