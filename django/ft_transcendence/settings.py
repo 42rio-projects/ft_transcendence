@@ -39,7 +39,7 @@ REST_FRAMEWORK = {
 }
 
 INSTALLED_APPS = [
-    # 'daphne',
+    'daphne',
 	'login.apps.LoginConfig',
     'pong',
     'chat',
