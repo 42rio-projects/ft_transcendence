@@ -13,6 +13,10 @@ start:
 down:
 	$(COMPOSE) down
 
+re:
+	$(COMPOSE) down
+	$(COMPOSE) up
+
 stop:
 	$(COMPOSE) stop
 

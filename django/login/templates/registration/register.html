@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/gridbackground.css' %}">
+	<title>ft_transcendence</title>
+</head>
+
+<body>
+<header>
+</header>
+<div class="login-page">
+	<div class="form">
+	   <form class="login-form" method="post"  id="loginForm">
+		<span class="instruction">Escolha um usuário</span>
+		{% csrf_token %}
+		<!-- {{ form.as_p }} -->
+		  <input type="text" name="username" id="usernameFormInput" placeholder="usuário" />
+			<span class="instruction">Sua senha deve conter no mínimo 8 caracteres.</span>
+		  <input type="password" name="password1" id="passwordFormInput" placeholder="senha" />
+		  <input type="password" name="password2" id="passwordConfirmInput" placeholder="re-escreva a senha" />
+		  <button type="submit" id="formUploadButton"><b>CADASTRAR</b></button>
+		  <p class="message" id="errorFormMessage"></p>
+	   </form>
+	</div>
+ </div>
+
+
+<!-- Script -->
+<!-- <script type="text/javascript" src="{% static 'js/script.js' %}"></script> -->
+</body>
+
+</html>
