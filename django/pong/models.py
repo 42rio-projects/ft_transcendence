@@ -12,6 +12,7 @@ class Tournament(models.Model):
         on_delete=models.SET_NULL,
         related_name='championships'
     )
+    # add method to create rounds
 
 
 class Round(models.Model):
@@ -45,7 +46,14 @@ class Game(models.Model):
         related_name='games'
     )
     date = models.DateField(auto_now_add=True)
-    # add methods to return winner and loser
+
+    # Placeholder method to return winner
+    def winner(self):
+        return self.player_1
+
+    # Placeholder method to return loser
+    def loser(self):
+        return self.player_2
 
 
 class Score(models.Model):
