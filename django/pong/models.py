@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Tournament(models.Model):
@@ -9,10 +12,13 @@ class Tournament(models.Model):
     winner = models.ForeignKey(
         User,
         null=True,
+        blank=True,
         on_delete=models.SET_NULL,
         related_name='championships'
     )
-    # add method to create rounds
+
+    def new_round(self):
+        logger.warning(f'{self.name} round advanced')
 
 
 class Round(models.Model):

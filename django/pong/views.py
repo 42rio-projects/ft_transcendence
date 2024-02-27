@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .services import send_twilio_code, check_twilio_code
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import permission_classes, action
 
 
 @permission_classes((permissions.AllowAny,))
@@ -60,5 +60,13 @@ class GameViewSet(viewsets.ModelViewSet):
 
 class TournamentViewSet(viewsets.ModelViewSet):
     queryset = models.Tournament.objects.all()
+    lookup_field = 'name'
     serializer_class = serializers.TournamentSerializer
     permission_classes = [IsAuthenticated]
+
+    # temporary API endpoint to advance tournament
+    @action(detail=True, methods=['GET'])
+    def advance(self, request, name=None):
+        tournament = self.get_object()
+        tournament.new_round()
+        return Response({'status': 'tournament round advanced'})
