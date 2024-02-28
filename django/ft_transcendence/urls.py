@@ -15,11 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth import views
+from login import views
 from rest_framework.authtoken import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 urlpatterns = [
+	path('', include('login.urls')),
     path('', include('pong.urls')),
     path('', include('chat.urls')),
     path('admin/', admin.site.urls),

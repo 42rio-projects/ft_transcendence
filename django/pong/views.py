@@ -14,12 +14,40 @@ class MenuView(APIView):
     def get(self, request, format=None):
         return render(request, "menu.html")
 
-
 @permission_classes((permissions.AllowAny,))
 class GameView(APIView):
     def get(self, request, format=None):
         return render(request, "game.html")
 
+@permission_classes((permissions.AllowAny,))
+class Index(APIView):
+    def get(self,request, format=None):
+        return render(request, "index.html")
+
+@permission_classes((permissions.AllowAny,))
+class Menu(APIView):
+    def get(self, request, format=None):
+        return render(request, "menu.html")
+
+@permission_classes((permissions.AllowAny,))
+class Game(APIView):
+    def get(self, request, format=None):
+        return render(request, "game.html")
+
+@permission_classes((permissions.AllowAny,))
+class Loadscreen(APIView):
+    def get(self, request, format=None):
+        return render(request, "loadscreen.html")
+
+@permission_classes((permissions.AllowAny,))
+class Leaderboard(APIView):
+    def get(self, request, format=None):
+        return render(request, "leaderboard.html")
+
+@permission_classes((permissions.AllowAny,))
+class Cadastro(APIView):
+    def get(self,request, format=None):
+        return render(request, "cadastro.html")
 
 @permission_classes([IsAuthenticated])
 class TwilioEndpoint(APIView):
@@ -36,15 +64,6 @@ class TwilioEndpoint(APIView):
             return Response({'status': status})
         else:
             return Response({'error': 'Invalid request'}, status=400)
-
-
-def loadscreen(request):
-    return render(request, "loadscreen.html")
-
-
-def leaderboard(request):
-    return render(request, "leaderboard.html")
-
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = models.User.objects.all()

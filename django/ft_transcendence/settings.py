@@ -40,6 +40,7 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = [
     'daphne',
+	'login.apps.LoginConfig',
     'pong',
     'chat',
     'django.contrib.admin',
@@ -48,9 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'rest_framework_simplejwt',
+    # 'rest_framework',
+    # 'rest_framework.authtoken',
+    # 'rest_framework_simplejwt',
 ]
 
 SIMPLE_JWT = {
@@ -104,14 +105,13 @@ WSGI_APPLICATION = 'ft_transcendence.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'HOST': 'aws-0-sa-east-1.pooler.supabase.com',
-        'OPTIONS': {
-            'service': 'admin',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        "HOST": "postgres",
+        "OPTIONS": {
+            "service": "admin",
         },
     }
 }
@@ -172,3 +172,7 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'menu'
+LOGOUT_REDIRECT_URL = '/'
