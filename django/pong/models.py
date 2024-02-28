@@ -18,12 +18,24 @@ class Tournament(models.Model):
     )
 
     def new_round(self):
-        if self.players.count() < 4:
+        if self.winner is not None:
+            raise Exception('Tournament already over')
+        elif self.players.count() < 4:
             raise Exception('Not enough players in the tournament.')
         elif self.rounds.count() == 0:
             round = Round(tournament=self, number=1)
             round.save()
             round.first_games(self.players.iterator())
+        else:
+            previous = self.rounds.last()
+            if previous.games.count() == 1:
+                self.winner = previous.games.last().winner()
+                self.save()
+                return
+            else:
+                round = Round(tournament=self, number=previous.number + 1)
+                round.save()
+                round.next_games(previous)
 
 
 class Round(models.Model):
@@ -35,7 +47,6 @@ class Round(models.Model):
     number = models.PositiveSmallIntegerField()
 
     def first_games(self, players):
-        logger.warning('First round creation, players:')
         pair = []
         for player in players:
             pair.append(player)
@@ -47,6 +58,15 @@ class Round(models.Model):
 
     def next_games(self, previous):
         logger.warning('Sequential round creation')
+        pair = []
+        previous_games = previous.games.iterator()
+        for game in previous_games:
+            pair.append(game.winner())
+            if len(pair) == 2:
+                Game(player_1=pair[0], player_2=pair[1], round=self).save()
+                pair.clear()
+        if len(pair) == 1:
+            Game(player_1=pair[0], round=self).save()
 
 
 class Game(models.Model):
