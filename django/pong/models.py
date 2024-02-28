@@ -37,6 +37,9 @@ class Tournament(models.Model):
                 round.save()
                 round.next_games(previous)
 
+    def __str__(self):
+        return (self.name)
+
 
 class Round(models.Model):
     tournament = models.ForeignKey(
@@ -67,6 +70,9 @@ class Round(models.Model):
                 pair.clear()
         if len(pair) == 1:
             Game(player_1=pair[0], round=self).save()
+
+    def __str__(self):
+        return (f'{self.tournament.name} round {self.number}')
 
 
 class Game(models.Model):
@@ -100,6 +106,12 @@ class Game(models.Model):
     def loser(self):
         return self.player_2
 
+    def __str__(self):
+        try:
+            return (f'{self.player_1.username} vs {self.player_2.username}')
+        except Exception:
+            return (f'{self.player_1.username} vs NULL')
+
 
 class Score(models.Model):
     p1_points = models.PositiveSmallIntegerField(default=0)
@@ -109,3 +121,6 @@ class Score(models.Model):
         related_name='score',
         on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return (f'{self.p1_points} - {self.p2_points}')
