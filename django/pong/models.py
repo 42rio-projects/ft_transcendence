@@ -18,7 +18,12 @@ class Tournament(models.Model):
     )
 
     def new_round(self):
-        logger.warning(f'{self.name} round advanced')
+        if self.players.count() < 4:
+            raise Exception('Not enough players in the tournament.')
+        elif self.rounds.count() == 0:
+            round = Round(tournament=self, number=1)
+            round.save()
+            round.first_games(self.players.iterator())
 
 
 class Round(models.Model):
@@ -28,6 +33,20 @@ class Round(models.Model):
         on_delete=models.CASCADE
     )
     number = models.PositiveSmallIntegerField()
+
+    def first_games(self, players):
+        logger.warning('First round creation, players:')
+        pair = []
+        for player in players:
+            pair.append(player)
+            if len(pair) == 2:
+                Game(player_1=pair[0], player_2=pair[1], round=self).save()
+                pair.clear()
+        if len(pair) == 1:
+            Game(player_1=pair[0], round=self).save()
+
+    def next_games(self, previous):
+        logger.warning('Sequential round creation')
 
 
 class Game(models.Model):
@@ -48,7 +67,7 @@ class Game(models.Model):
         null=True,
         blank=True,
         default=None,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='games'
     )
     date = models.DateField(auto_now_add=True)
