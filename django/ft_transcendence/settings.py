@@ -32,26 +32,17 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-}
-
 INSTALLED_APPS = [
     'daphne',
-	'login.apps.LoginConfig',
-    'pong',
+    'auth',
     'chat',
+    'pong',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'rest_framework',
-    # 'rest_framework.authtoken',
-    # 'rest_framework_simplejwt',
 ]
 
 SIMPLE_JWT = {
