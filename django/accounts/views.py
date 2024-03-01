@@ -16,7 +16,7 @@ AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
 
 def login(request):
     if request.user.is_authenticated:
-        return redirect("welcome")
+        return redirect("index")
 
     if request.method == "POST":
         username = request.POST["username"]
@@ -31,7 +31,7 @@ def login(request):
         django_login(request, user)
 
         messages.success(request, "You are now logged in")
-        return redirect("welcome")
+        return redirect("index")
 
     if request.method == "GET":
         return render(request, "login.html")
