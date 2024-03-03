@@ -1,0 +1,13 @@
+from user.models import User
+from django.contrib.auth import forms
+
+
+class CustomUserCreationForm(forms.UserCreationForm):
+    class Meta(forms.UserCreationForm.Meta):
+        model = User
+        fields = ('username', 'password1', 'password2')
+
+    def __init__(self, *args, **kwargs):  # Adiciona
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
