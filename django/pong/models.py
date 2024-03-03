@@ -1,8 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
-import logging
-
-logger = logging.getLogger(__name__)
+from user.models import User
 
 
 class Tournament(models.Model):
@@ -60,7 +57,6 @@ class Round(models.Model):
             Game(player_1=pair[0], round=self).save()
 
     def next_games(self, previous):
-        logger.warning('Sequential round creation')
         pair = []
         previous_games = previous.games.iterator()
         for game in previous_games:
