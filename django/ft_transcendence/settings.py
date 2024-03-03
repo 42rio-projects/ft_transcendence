@@ -40,9 +40,10 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = [
     'daphne',
-	'login.apps.LoginConfig',
+    'login.apps.LoginConfig',
     'pong',
     'chat',
+    'user',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,6 +54,8 @@ INSTALLED_APPS = [
     # 'rest_framework.authtoken',
     # 'rest_framework_simplejwt',
 ]
+
+AUTH_USER_MODEL = "user.User"
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
