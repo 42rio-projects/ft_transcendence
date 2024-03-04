@@ -23,7 +23,7 @@ class User(AbstractUser):
         for friendship in friendships:
             if friendship.user1 != self:
                 friends.append(friendship.user1)
-            if friendship.user2 != self:
+            elif friendship.user2 != self:
                 friends.append(friendship.user2)
         return friends
 

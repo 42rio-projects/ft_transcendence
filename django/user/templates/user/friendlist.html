@@ -1,10 +1,25 @@
 {% if user.is_authenticated %}
-<div>
-  <h2>Friends</h2>
-  {% for user in user.get_friends %}
-  <li>{{ user.username }}</li>
-  {% endfor %}
-</div>
-{% else %}
-<p>Welcome, new user. Please <a href="/">Login</a></p>
-{% endif %}
+<body>
+  <div>
+    <h2>Friends</h2>
+    {% for user in user.get_friends %}
+    <li>{{ user.username }}</li>
+    {% endfor %}
+  </div>
+  <script>
+    const chatSocket = new WebSocket(
+      "ws://" + window.location.host + "/ws/status/",
+    );
+
+    chatSocket.onmessage = function (e) {
+      const data = JSON.parse(e.data);
+      console.log(data);
+    };
+    chatSocket.onclose = function (e) {
+      console.error("Chat socket closed unexpectedly");
+    };
+  </script>
+  {% else %}
+  <p>Welcome, new user. Please <a href="/">Login</a></p>
+  {% endif %}
+</body>
