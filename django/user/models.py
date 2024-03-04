@@ -8,6 +8,11 @@ class User(AbstractUser):
         through="IsFriendsWith",
         symmetrical=True
     )
+    blocked_list = models.ManyToManyField(
+        'self',
+        through="IsBlockedBy",
+        symmetrical=False
+    )
 
 
 class IsFriendsWith(models.Model):
@@ -38,5 +43,30 @@ class IsFriendsWith(models.Model):
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_prevent_self_add",
                 check=~models.Q(user1=models.F("user2")),
+            ),
+        ]
+
+
+class IsBlockedBy(models.Model):
+    blocker = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='blocks'
+    )
+    blocked = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='blocked_by'
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                name="%(app_label)s_%(class)s_unique_relationships",
+                fields=["blocker", "blocked"]
+            ),
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_prevent_self_block",
+                check=~models.Q(blocker=models.F("blocked")),
             ),
         ]

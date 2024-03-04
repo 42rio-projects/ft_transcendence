@@ -1,20 +1,22 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from user.models import User, IsFriendsWith
+import user.models as models
 
 
 class IsFriendsWithInline(admin.TabularInline):
-    model = IsFriendsWith
+    model = models.IsFriendsWith
     fk_name = 'user1'
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.filter(user1=request.user)
+
+class IsBlockedByInline(admin.TabularInline):
+    model = models.IsBlockedBy
+    fk_name = 'blocker'
 
 
 class UserAdm(UserAdmin):
-    inlines = [IsFriendsWithInline]
+    inlines = [IsFriendsWithInline, IsBlockedByInline]
 
 
-admin.site.register(User, UserAdm)
-admin.site.register(IsFriendsWith)
+admin.site.register(models.User, UserAdm)
+admin.site.register(models.IsFriendsWith)
+admin.site.register(models.IsBlockedBy)
