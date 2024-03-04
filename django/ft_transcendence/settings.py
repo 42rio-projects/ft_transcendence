@@ -112,7 +112,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "postgres",
-        "HOST": "postgres",
+        "HOST": "aws-0-sa-east-1.pooler.supabase.com",
         "OPTIONS": {
             "service": "admin",
         },
@@ -165,7 +165,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ASGI_APPLICATION = 'chat.asgi.application'
+ASGI_APPLICATION = 'ft_transcendence.asgi.application'
 
 CHANNEL_LAYERS = {
     "default": {

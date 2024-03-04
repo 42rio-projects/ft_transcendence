@@ -12,14 +12,25 @@ class statusConsumer(AsyncWebsocketConsumer):
         await self.accept()
         self.user = self.scope['user']
         self.online_users.append(self.user.username)
+        await self.send(text_data=json.dumps(
+            {"online_users": self.online_users})
+        )
         await self.channel_layer.group_send(
-            'status', {'type': 'status.update'}
+            'status',
+            {
+                'type': 'user.connected',
+                'username': self.user.username
+            }
         )
 
     async def disconnect(self, close_code):
         self.online_users.remove(self.user.username)
         await self.channel_layer.group_send(
-            'status', {'type': 'status.update'}
+            'status',
+            {
+                'type': 'user.disconnected',
+                'username': self.user.username
+            }
         )
         await self.channel_layer.group_discard('satus', self.channel_name)
 
@@ -31,3 +42,13 @@ class statusConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps(
             {"online_users": self.online_users})
         )
+
+    async def user_connected(self, event):
+        """Send updated online list to websocket"""
+        username = event['username']
+        await self.send(text_data=json.dumps({"connected_user": username}))
+
+    async def user_disconnected(self, event):
+        """Send updated online list to websocket"""
+        username = event['username']
+        await self.send(text_data=json.dumps({"disconnected_user": username}))

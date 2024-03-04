@@ -1,23 +1,55 @@
+<!doctype html>
 {% if user.is_authenticated %}
 <body>
   <div>
     <h2>Friends</h2>
-    {% for user in user.get_friends %}
-    <li>{{ user.username }}</li>
-    {% endfor %}
+    <ul id="Friendlist">
+      {% for user in user.get_friends %}
+      <li>
+        {{ user.username }}
+        <p id="{{ user.username }}">offline</p>
+      </li>
+      {% endfor %}
+    </ul>
   </div>
   <script>
+    let onlineUsers = [];
+
     const chatSocket = new WebSocket(
       "ws://" + window.location.host + "/ws/status/",
     );
 
     chatSocket.onmessage = function (e) {
       const data = JSON.parse(e.data);
-      console.log(data);
+      if ("connected_user" in data) {
+        setOnline(data["connected_user"]);
+      } else if ("disconnected_user" in data) {
+        setOffline(data["disconnected_user"]);
+      } else {
+        onlineUsers = data["online_users"];
+        setInitialStatus();
+      }
     };
+
     chatSocket.onclose = function (e) {
       console.error("Chat socket closed unexpectedly");
     };
+
+    function setInitialStatus() {
+      console.log("set initial status.");
+      onlineUsers.forEach((element) => {
+        status = document.getElementById(element);
+        console.log("set " + element + " online.");
+      });
+    }
+
+    function setOnline(user) {
+      console.log("set " + user + " online.");
+    }
+
+    function setOffline(user) {
+      console.log("set " + user + " offline.");
+    }
   </script>
   {% else %}
   <p>Welcome, new user. Please <a href="/">Login</a></p>
