@@ -25,7 +25,7 @@ class IsFriendsWith(models.Model):
                 fields=["user1", "user2"]
             ),
             models.CheckConstraint(
-                name="%(app_label)s_%(class)s_prevent_self_follow",
+                name="%(app_label)s_%(class)s_prevent_self_add",
                 check=~models.Q(user1=models.F("user2")),
             ),
         ]
