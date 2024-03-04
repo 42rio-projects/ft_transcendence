@@ -1,5 +1,10 @@
 {% if user.is_authenticated %}
-<p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+<div>
+  <h2>Friends</h2>
+  {% for user in user.get_friends %}
+  <li>{{ user.username }}</li>
+  {% endfor %}
+</div>
 {% else %}
-<p>Welcome, new user. Please log in.</p>
+<p>Welcome, new user. Please <a href="/">Login</a></p>
 {% endif %}
