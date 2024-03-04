@@ -79,7 +79,7 @@ def receive_code(request):
     if request.method == "POST":
         to = request.POST["to"]
         if not to:
-            messages.error(request, "Phone number is required")
+            messages.error(request, "Email is required")
             return redirect("receive_code")
 
         channel = "email"
@@ -91,10 +91,10 @@ def receive_code(request):
 
         if status == "pending":
             messages.success(request, "Verification code sent")
+            return redirect("confirm_code")
         else:
             messages.error(request, f"Verification code {status}")
-        
-        return redirect("confirm_code")
+            return redirect("receive_code")
 
     if request.method == "GET":
         return render(request, "receive_code.html")
@@ -105,22 +105,25 @@ def confirm_code(request):
     if request.method == "POST":
         to = request.POST["to"]
         if not to:
-            messages.error(request, "Phone number is required")
-            return redirect("receive_code")
+            messages.error(request, "Email is required")
+            return redirect("confirm_code")
 
         code = request.POST["code"]
         if code:
             verification = Client(ACCOUNT_SID, AUTH_TOKEN).verify.v2.services(
                 SERVICE_SID).verification_checks.create(to=to, code=code)
+        else:
+            messages.error(request, "Code is required")
+            return redirect("confirm_code")
 
         status = verification.status
 
         if status == "approved":
             messages.success(request, "Verification code approved")
+            return redirect("index")
         else:
             messages.error(request, f"Verification code {status}")
-
-        return render(request, "confirm_code.html")
+            return redirect("confirm_code")
 
     if request.method == "GET":
         return render(request, "confirm_code.html")
