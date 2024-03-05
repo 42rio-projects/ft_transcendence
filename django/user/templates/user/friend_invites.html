@@ -1,0 +1,24 @@
+<!doctype html>
+{% if user.is_authenticated %}
+<body>
+  <div>
+    <h2>Send Invite</h2>
+    <input id="username-input" type="text" size="20" />
+    <input id="request-submit" type="button" value="Send" />
+    <h2>Invites Received</h2>
+    <ul id="InvitesReceived">
+      {% for invite in user.friend_invites_received.all%}
+      <li>{{ invite.sender }}</li>
+      {% endfor %}
+    </ul>
+    <h2>Invites Sent</h2>
+    <ul id="InvitesSent">
+      {% for invite in user.friend_invites_sent.all%}
+      <li>{{ invite.receiver }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% else %}
+  <p>Welcome, new user. Please <a href="/">Login</a></p>
+  {% endif %}
+</body>
