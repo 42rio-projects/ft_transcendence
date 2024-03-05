@@ -7,7 +7,7 @@
       {% for user in user.get_friends %}
       <li>
         {{ user.username }}
-        <p id="{{ user.username }}">offline</p>
+        <p id="{{ user.username }}">OFF</p>
       </li>
       {% endfor %}
     </ul>
@@ -36,19 +36,17 @@
     };
 
     function setInitialStatus() {
-      console.log("set initial status.");
       onlineUsers.forEach((element) => {
-        status = document.getElementById(element);
-        console.log("set " + element + " online.");
+        document.getElementById(element).textContent = "ON";
       });
     }
 
     function setOnline(user) {
-      console.log("set " + user + " online.");
+      document.getElementById(user).textContent = "ON";
     }
 
     function setOffline(user) {
-      console.log("set " + user + " offline.");
+      document.getElementById(user).textContent = "OFF";
     }
   </script>
   {% else %}
