@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 
 
 class User(AbstractUser):
@@ -13,6 +14,12 @@ class User(AbstractUser):
         'self',
         through="IsBlockedBy",
         symmetrical=False
+    )
+    friend_invites = models.ManyToManyField(
+        'self',
+        through='FriendInvite',
+        symmetrical=False,
+        related_name='friend_invites_set'
     )
 
     def get_friends(self):
@@ -81,5 +88,49 @@ class IsBlockedBy(models.Model):
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_prevent_self_block",
                 check=~models.Q(blocker=models.F("blocked")),
+            ),
+        ]
+
+
+class FriendInvite(models.Model):
+    sender = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='friend_invites_sent'
+    )
+    receiver = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='friend_invites_received'
+    )
+
+    def clean(self):
+        """
+        Custom validation to prevent sending invites to fiends.
+        """
+        if IsFriendsWith.objects.filter(
+            Q(user1=self.sender, user2=self.receiver) |
+            Q(user1=self.receiver, user2=self.sender)
+        ).exists():
+            raise ValidationError(
+                'You cannot send a friend invite to a friend.'
+            )
+
+    def save(self, *args, **kwargs):
+        """
+        Overridden save method to enforce validation and superclass save.
+        """
+        self.clean()  # Call the custom validation
+        super().save(*args, **kwargs)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                name="%(app_label)s_%(class)s_unique_relationships",
+                fields=["sender", "receiver"]
+            ),
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_prevent_self_invite",
+                check=~models.Q(sender=models.F("receiver")),
             ),
         ]

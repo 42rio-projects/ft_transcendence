@@ -20,3 +20,4 @@ class UserAdm(UserAdmin):
 admin.site.register(models.User, UserAdm)
 admin.site.register(models.IsFriendsWith)
 admin.site.register(models.IsBlockedBy)
+admin.site.register(models.FriendInvite)
