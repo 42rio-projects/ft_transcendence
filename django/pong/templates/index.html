@@ -1,0 +1,8 @@
+{% include 'messages.html' %}
+
+<h1>Welcome, {{ username }}</h1>
+
+<a href="{% url 'receive_code' %}">Receive code</a>
+<a href="{% url 'confirm_code' %}">Confirm code</a>
+
+<a href="{% url 'logout' %}">Logout</a>
