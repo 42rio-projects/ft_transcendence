@@ -48,7 +48,9 @@ class IsFriendsWith(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        if IsFriendsWith.objects.filter(user1=self.user2, user2=self.user1).exists():
+        if IsFriendsWith.objects.filter(
+                user1=self.user2, user2=self.user1
+        ).exists():
             # Friendship already exists, don't create a duplicate entry
             pass
         else:
@@ -106,7 +108,7 @@ class FriendInvite(models.Model):
 
     def clean(self):
         """
-        Custom validation to prevent sending invites to fiends.
+        Custom validation to prevent sending invites to friends.
         """
         if IsFriendsWith.objects.filter(
             Q(user1=self.sender, user2=self.receiver) |
@@ -120,8 +122,19 @@ class FriendInvite(models.Model):
         """
         Overridden save method to enforce validation and superclass save.
         """
-        self.clean()  # Call the custom validation
-        super().save(*args, **kwargs)
+        self.clean()
+        invite = FriendInvite.objects.filter(
+            sender=self.receiver, receiver=self.sender
+        )
+        if invite.exists():
+            invite[0].accept()
+        else:
+            super().save(*args, **kwargs)
+
+    def accept(self):
+        friendship = IsFriendsWith(user1=self.sender, user2=self.receiver)
+        friendship.save()
+        self.delete()
 
     class Meta:
         constraints = [
