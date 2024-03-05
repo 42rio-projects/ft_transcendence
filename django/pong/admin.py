@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Tournament, Game
+import pong.models as models
 
 # Register your models here.
 
-
-admin.site.register(Tournament)
-admin.site.register(Game)
+admin.site.register(models.Game)
+admin.site.register(models.Tournament)
+admin.site.register(models.Round)
+admin.site.register(models.Score)

@@ -54,11 +54,11 @@ def register(request):
         if password != confirm_password:
             messages.error(request, "Passwords do not match")
             return redirect("register")
-            
+
         if len(password) < 8:
             messages.error(request, "Password must be at least 8 characters")
             return redirect("register")
-            
+
         user = User.objects.create_user(username=username, password=password)
         user.save()
 
