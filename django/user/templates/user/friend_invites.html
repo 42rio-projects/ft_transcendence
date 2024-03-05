@@ -3,13 +3,29 @@
 <body>
   <div>
     <h2>Send Invite</h2>
-    <input id="username-input" type="text" size="20" />
-    <input id="request-submit" type="button" value="Send" />
+    <form method="post" action="{% url 'sendInvite' %}">
+      {% csrf_token %}
+      <label for="username">Username:</label>
+      <input type="text" name="username" id="username" required />
+      <button type="submit">Submit</button>
+    </form>
     <h2>Invites Received</h2>
     <ul id="InvitesReceived">
       {% for invite in user.friend_invites_received.all%}
-      <li>{{ invite.sender }}</li>
-      {% endfor %}
+      <li>
+        {{ invite.sender }}
+        <form method="POST" action="{% url 'respondInvite' invite.id %}">
+          {% csrf_token %}
+          <button type="submit">Accept request</button>
+          <input type="hidden" name="action" value="accept" />
+        </form>
+        <form method="POST" action="{% url 'respondInvite' invite.id %}">
+          {% csrf_token %}
+          <button type="submit">Reject request</button>
+          <input type="hidden" name="action" value="reject" />
+        </form>
+        {% endfor %}
+      </li>
     </ul>
     <h2>Invites Sent</h2>
     <ul id="InvitesSent">

@@ -34,6 +34,9 @@ class User(AbstractUser):
                 friends.append(friendship.user2)
         return friends
 
+    def add_friend(self, user):
+        FriendInvite(sender=self, receiver=user).save()
+
 
 class IsFriendsWith(models.Model):
     user1 = models.ForeignKey(
@@ -131,9 +134,10 @@ class FriendInvite(models.Model):
         else:
             super().save(*args, **kwargs)
 
-    def accept(self):
-        friendship = IsFriendsWith(user1=self.sender, user2=self.receiver)
-        friendship.save()
+    def respond(self, accepted):
+        if accepted is True:
+            friendship = IsFriendsWith(user1=self.sender, user2=self.receiver)
+            friendship.save()
         self.delete()
 
     class Meta:
