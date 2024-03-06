@@ -17,6 +17,19 @@ def friendInvites(request):
     return HttpResponse(template.render(context, request))
 
 
+def excludeFriend(request, user_id):
+    if request.method == 'POST':
+        user = get_object_or_404(
+            models.User,
+            pk=user_id,
+        )
+        try:
+            request.user.del_friend(user)
+        except Exception as e:
+            return HttpResponse(e)
+    return redirect('friendList')
+
+
 def sendInvite(request):
     if request.method == 'POST':
         name = request.POST.get('username')

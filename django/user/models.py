@@ -37,6 +37,14 @@ class User(AbstractUser):
     def add_friend(self, user):
         FriendInvite(sender=self, receiver=user).save()
 
+    def del_friend(self, user):
+        friendship = IsFriendsWith.objects.filter(
+            Q(user1=self, user2=user) |
+            Q(user1=user, user2=self)
+        )
+        if friendship.exists():
+            friendship[0].delete()
+
 
 class IsFriendsWith(models.Model):
     user1 = models.ForeignKey(
