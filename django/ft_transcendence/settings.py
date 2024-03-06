@@ -149,7 +149,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ASGI_APPLICATION = 'chat.asgi.application'
+ASGI_APPLICATION = 'ft_transcendence.asgi.application'
 
 CHANNEL_LAYERS = {
     "default": {

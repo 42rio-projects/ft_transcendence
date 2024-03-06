@@ -1,10 +1,8 @@
-from django.shortcuts import render
-from rest_framework import viewsets, permissions
-import user.serializers as serializers
+from django.http import HttpResponse
+from django.template import loader
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = models.User.objects.all()
-    serializer_class = serializers.UserSerializer
-    permission_classes = [IsAuthenticated]
-# Create your views here.
+def friendlist(request):
+    template = loader.get_template("user/friendlist.html")
+    context = {}
+    return HttpResponse(template.render(context, request))

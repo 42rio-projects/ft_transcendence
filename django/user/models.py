@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Q
 
 
 class User(AbstractUser):
@@ -13,6 +14,18 @@ class User(AbstractUser):
         through="IsBlockedBy",
         symmetrical=False
     )
+
+    def get_friends(self):
+        friendships = IsFriendsWith.objects.filter(
+            Q(user1=self) | Q(user2=self)
+        ).prefetch_related('user1', 'user2')
+        friends = []
+        for friendship in friendships:
+            if friendship.user1 != self:
+                friends.append(friendship.user1)
+            elif friendship.user2 != self:
+                friends.append(friendship.user2)
+        return friends
 
 
 class IsFriendsWith(models.Model):

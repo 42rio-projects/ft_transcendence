@@ -1,0 +1,55 @@
+<!doctype html>
+{% if user.is_authenticated %}
+<body>
+  <div>
+    <h2>Friends</h2>
+    <ul id="Friendlist">
+      {% for user in user.get_friends %}
+      <li>
+        {{ user.username }}
+        <p id="{{ user.username }}">OFF</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <script>
+    let onlineUsers = [];
+
+    const chatSocket = new WebSocket(
+      "ws://" + window.location.host + "/ws/status/",
+    );
+
+    chatSocket.onmessage = function (e) {
+      const data = JSON.parse(e.data);
+      if ("connected_user" in data) {
+        setOnline(data["connected_user"]);
+      } else if ("disconnected_user" in data) {
+        setOffline(data["disconnected_user"]);
+      } else {
+        onlineUsers = data["online_users"];
+        setInitialStatus();
+      }
+    };
+
+    chatSocket.onclose = function (e) {
+      console.error("Chat socket closed unexpectedly");
+    };
+
+    function setInitialStatus() {
+      onlineUsers.forEach((element) => {
+        document.getElementById(element).textContent = "ON";
+      });
+    }
+
+    function setOnline(user) {
+      document.getElementById(user).textContent = "ON";
+    }
+
+    function setOffline(user) {
+      document.getElementById(user).textContent = "OFF";
+    }
+  </script>
+  {% else %}
+  <p>Welcome, new user. Please <a href="/">Login</a></p>
+  {% endif %}
+</body>
