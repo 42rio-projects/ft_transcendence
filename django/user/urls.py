@@ -26,8 +26,8 @@ urlpatterns = [
         name="respondInvite"
     ),
     path(
-        "send-invite",
-        views.sendInvite,
-        name="sendInvite"
+        "send-friend-invite",
+        views.sendFriendInvites,
+        name="sendFriendInvites"
     ),
 ]

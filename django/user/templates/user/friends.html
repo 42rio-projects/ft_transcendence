@@ -9,10 +9,11 @@
 <body>
   {% if user.is_authenticated %}
   <div id="friends-menu" class="verticalButtons">
-    <button onclick="renderSentInvites()">Invites Sent</button>
-    <button onclick="renderReceivedInvites()">Invites Received</button>
+    <button onclick="renderSentFriendInvites()">Invites Sent</button>
+    <button onclick="renderReceivedFriendInvites()">Invites Received</button>
+    <button onclick="renderSendFriendInvites()">Add friends</button>
   </div>
-  <div id="friendlist-data"></div>
+  <div id="friends-rendered-data"></div>
 
   {% else %}
   <p>Welcome, new user. Please <a href="/">Login</a></p>
@@ -22,20 +23,29 @@
 <script>
   // FRIENDS RELATED FUNCTIONS FOR THE SPA \\
 
-  function renderSentInvites() {
+  function renderSentFriendInvites() {
     fetch("{% url 'friendInvitesSent' %}")
       .then((response) => response.text())
       .then((html) => {
-        const container = document.getElementById("friendlist-data");
+        const container = document.getElementById("friends-rendered-data");
         container.innerHTML = html;
       });
   }
 
-  function renderReceivedInvites() {
+  function renderReceivedFriendInvites() {
     fetch("{% url 'friendInvitesReceived' %}")
       .then((response) => response.text())
       .then((html) => {
-        const container = document.getElementById("friendlist-data");
+        const container = document.getElementById("friends-rendered-data");
+        container.innerHTML = html;
+      });
+  }
+
+  function renderSendFriendInvites() {
+    fetch("{% url 'sendFriendInvites' %}")
+      .then((response) => response.text())
+      .then((html) => {
+        const container = document.getElementById("friends-rendered-data");
         container.innerHTML = html;
       });
   }

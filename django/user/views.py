@@ -36,6 +36,24 @@ def friendInvitesReceived(request):
     return HttpResponse(template.render(context, request))
 
 
+def sendFriendInvites(request):
+    if request.method == 'POST':
+        name = request.POST.get('username')
+        user = get_object_or_404(
+            models.User,
+            username=name,
+        )
+        try:
+            request.user.add_friend(user)
+            return ('Friend invite sent')
+        except Exception as e:
+            return HttpResponse(e)
+    else:
+        template = loader.get_template("user/send_friend_invites.html")
+        context = {}
+        return HttpResponse(template.render(context, request))
+
+
 def excludeFriend(request, user_id):
     if request.method == 'POST':
         user = get_object_or_404(
@@ -47,20 +65,6 @@ def excludeFriend(request, user_id):
         except Exception as e:
             return HttpResponse(e)
     return redirect('friendList')
-
-
-def sendInvite(request):
-    if request.method == 'POST':
-        name = request.POST.get('username')
-        user = get_object_or_404(
-            models.User,
-            username=name,
-        )
-        try:
-            request.user.add_friend(user)
-        except Exception as e:
-            return HttpResponse(e)
-    return redirect('friendInvites')
 
 
 def respondInvite(request, invite_id):
