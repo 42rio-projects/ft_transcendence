@@ -1,0 +1,6 @@
+<h2>Invites Sent</h2>
+<ul id="InvitesSent">
+  {% for invite in user.friend_invites_sent.all%}
+  <li>{{ invite.receiver }}</li>
+  {% endfor %}
+</ul>

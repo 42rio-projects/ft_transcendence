@@ -1,0 +1,30 @@
+<!doctype html>
+<head>
+  <style>
+    .friendMenu {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+  {% if user.is_authenticated %}
+  <div id="friends-menu" display="">
+    <button onclick="renderSentInvites()">Invites Sent</button>
+  </div>
+  <div id="friendlist-data"></div>
+
+  {% else %}
+  <p>Welcome, new user. Please <a href="/">Login</a></p>
+  {% endif %}
+</body>
+
+<script>
+  function renderSentInvites() {
+    fetch("/friend-invites-sent/")
+      .then((response) => response.text())
+      .then((html) => {
+        const container = document.getElementById("friendlist-data");
+        container.innerHTML = html;
+      });
+  }
+</script>

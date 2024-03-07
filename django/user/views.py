@@ -2,7 +2,14 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
+
 import user.models as models
+
+
+def friends(request):
+    template = loader.get_template('user/friends.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
 
 
 def friendlist(request):
@@ -13,6 +20,12 @@ def friendlist(request):
 
 def friendInvites(request):
     template = loader.get_template("user/friend_invites.html")
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+
+def friendInvitesSent(request):
+    template = loader.get_template("user/friend_invites_sent.html")
     context = {}
     return HttpResponse(template.render(context, request))
 
