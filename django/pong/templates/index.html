@@ -1,8 +1,44 @@
-{% include 'messages.html' %}
+<!DOCTYPE html>
+<html lang="en">
 
-<h1>Welcome, {{ username }}</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ft_transcendence</title>
+</head>
 
-<a href="{% url 'receive_code' %}">Receive code</a>
-<a href="{% url 'confirm_code' %}">Confirm code</a>
+<body>
+    <div id="app"></div>
+</body>
 
-<a href="{% url 'logout' %}">Logout</a>
+<script>
+    function render(url) {
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("app").innerHTML = data;
+            });
+    }
+
+    function handleForm(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const data = new FormData(form);
+
+        fetch(form.action, {
+            method: form.method,
+            body: data
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("app").innerHTML = data;
+            });
+    }
+
+    window.onload = function () {
+        render("{% url 'app' %}");
+    };
+</script>
+
+</html>

@@ -16,7 +16,7 @@ AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
 
 def login(request):
     if request.user.is_authenticated:
-        return redirect("index")
+        return redirect("app")
 
     if request.method == "POST":
         username = request.POST["username"]
@@ -31,7 +31,7 @@ def login(request):
         django_login(request, user)
 
         messages.success(request, "You are now logged in")
-        return redirect("index")
+        return redirect("app")
 
     if request.method == "GET":
         return render(request, "login.html")
@@ -39,7 +39,7 @@ def login(request):
 
 def register(request):
     if request.user.is_authenticated:
-        return redirect("welcome.html")
+        return redirect("app")
 
     if request.method == "POST":
         username = request.POST["username"]
@@ -74,7 +74,6 @@ def logout(request):
     return render(request, "logout.html")
 
 
-@login_required(login_url="login")
 def receive_code(request):
     if request.method == "POST":
         to = request.POST["to"]
@@ -100,7 +99,6 @@ def receive_code(request):
         return render(request, "receive_code.html")
 
 
-@login_required(login_url="login")
 def confirm_code(request):
     if request.method == "POST":
         to = request.POST["to"]
@@ -120,7 +118,7 @@ def confirm_code(request):
 
         if status == "approved":
             messages.success(request, "Verification code approved")
-            return redirect("index")
+            return redirect("app")
         else:
             messages.error(request, f"Verification code {status}")
             return redirect("confirm_code")
