@@ -1,15 +1,16 @@
 <!doctype html>
 <head>
   <style>
-    .friendMenu {
+    .verticalButtons {
       display: flex;
     }
   </style>
 </head>
 <body>
   {% if user.is_authenticated %}
-  <div id="friends-menu" display="">
+  <div id="friends-menu" class="verticalButtons">
     <button onclick="renderSentInvites()">Invites Sent</button>
+    <button onclick="renderReceivedInvites()">Invites Received</button>
   </div>
   <div id="friendlist-data"></div>
 
@@ -19,12 +20,25 @@
 </body>
 
 <script>
+  // FRIENDS RELATED FUNCTIONS FOR THE SPA \\
+
   function renderSentInvites() {
-    fetch("/friend-invites-sent/")
+    fetch("{% url 'friendInvitesSent' %}")
       .then((response) => response.text())
       .then((html) => {
         const container = document.getElementById("friendlist-data");
         container.innerHTML = html;
       });
   }
+
+  function renderReceivedInvites() {
+    fetch("{% url 'friendInvitesReceived' %}")
+      .then((response) => response.text())
+      .then((html) => {
+        const container = document.getElementById("friendlist-data");
+        container.innerHTML = html;
+      });
+  }
+
+  // END \\
 </script>

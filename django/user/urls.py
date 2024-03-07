@@ -16,6 +16,11 @@ urlpatterns = [
         name="friendInvitesSent"
     ),
     path(
+        "friend-invites-received/",
+        views.friendInvitesReceived,
+        name="friendInvitesReceived"
+    ),
+    path(
         "friend-invites/<int:invite_id>/",
         views.respondInvite,
         name="respondInvite"

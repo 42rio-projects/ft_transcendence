@@ -30,6 +30,12 @@ def friendInvitesSent(request):
     return HttpResponse(template.render(context, request))
 
 
+def friendInvitesReceived(request):
+    template = loader.get_template("user/friend_invites_received.html")
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+
 def excludeFriend(request, user_id):
     if request.method == 'POST':
         user = get_object_or_404(
