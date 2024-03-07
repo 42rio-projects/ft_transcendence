@@ -1,0 +1,12 @@
+{% include 'messages.html' %}
+
+{% if user.email %}
+{% if user.email_verified %}
+<p>Your email is verified</p>
+<button onclick="render('{% url 'receive_code' %}')">Change email</button>
+{% else %}
+{% include 'confirm_code.html' %}
+{% endif %}
+{% else %}
+{% include 'receive_code.html' %}
+{% endif %}

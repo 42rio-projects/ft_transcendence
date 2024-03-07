@@ -22,6 +22,10 @@ def app(request):
     return render(request, "app.html")
 
 
+def verify(request):
+    return render(request, "verify.html")
+
+
 @permission_classes((permissions.AllowAny,))
 class GameView(APIView):
     def get(self, request, format=None):

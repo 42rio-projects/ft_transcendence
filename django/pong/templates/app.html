@@ -3,8 +3,7 @@
 <h1>ft_transcendence</h1>
 {% if user.is_authenticated %}
 <p>Welcome, {{ user.username }}</p>
-<button onclick="render({% url 'receive_code' %})">Receive Code</button>
-<button onclick="render({% url 'confirm_code' %})">Confirm Code</button>
+<button onclick="render({% url 'verify' %})">Verify</button>
 <button onclick="render({% url 'logout' %})">Logout</button>
 {% else %}
 <p>Please, <button onclick="render({% url 'login' %})">Login</button> to continue</p>
