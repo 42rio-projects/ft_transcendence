@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 
 
 class User(AbstractUser):
@@ -14,6 +15,12 @@ class User(AbstractUser):
         through="IsBlockedBy",
         symmetrical=False
     )
+    friend_invites = models.ManyToManyField(
+        'self',
+        through='FriendInvite',
+        symmetrical=False,
+        related_name='friend_invites_set'
+    )
 
     def get_friends(self):
         friendships = IsFriendsWith.objects.filter(
@@ -26,6 +33,17 @@ class User(AbstractUser):
             elif friendship.user2 != self:
                 friends.append(friendship.user2)
         return friends
+
+    def add_friend(self, user):
+        FriendInvite(sender=self, receiver=user).save()
+
+    def del_friend(self, user):
+        friendship = IsFriendsWith.objects.filter(
+            Q(user1=self, user2=user) |
+            Q(user1=user, user2=self)
+        )
+        if friendship.exists():
+            friendship[0].delete()
 
 
 class IsFriendsWith(models.Model):
@@ -41,7 +59,9 @@ class IsFriendsWith(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        if IsFriendsWith.objects.filter(user1=self.user2, user2=self.user1).exists():
+        if IsFriendsWith.objects.filter(
+                user1=self.user2, user2=self.user1
+        ).exists():
             # Friendship already exists, don't create a duplicate entry
             pass
         else:
@@ -81,5 +101,61 @@ class IsBlockedBy(models.Model):
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_prevent_self_block",
                 check=~models.Q(blocker=models.F("blocked")),
+            ),
+        ]
+
+
+class FriendInvite(models.Model):
+    sender = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='friend_invites_sent'
+    )
+    receiver = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='friend_invites_received'
+    )
+
+    def clean(self):
+        """
+        Custom validation to prevent sending invites to friends.
+        """
+        if IsFriendsWith.objects.filter(
+            Q(user1=self.sender, user2=self.receiver) |
+            Q(user1=self.receiver, user2=self.sender)
+        ).exists():
+            raise ValidationError(
+                'You cannot send a friend invite to a friend.'
+            )
+
+    def save(self, *args, **kwargs):
+        """
+        Overridden save method to enforce validation and superclass save.
+        """
+        self.clean()
+        invite = FriendInvite.objects.filter(
+            sender=self.receiver, receiver=self.sender
+        )
+        if invite.exists():
+            invite[0].accept()
+        else:
+            super().save(*args, **kwargs)
+
+    def respond(self, accepted):
+        if accepted is True:
+            friendship = IsFriendsWith(user1=self.sender, user2=self.receiver)
+            friendship.save()
+        self.delete()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                name="%(app_label)s_%(class)s_unique_relationships",
+                fields=["sender", "receiver"]
+            ),
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_prevent_self_invite",
+                check=~models.Q(sender=models.F("receiver")),
             ),
         ]

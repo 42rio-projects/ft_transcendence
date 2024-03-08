@@ -8,6 +8,10 @@
       <li>
         {{ user.username }}
         <p id="{{ user.username }}">OFF</p>
+        <form method="POST" action="{% url 'excludeFriend' user.id %}">
+          {% csrf_token %}
+          <button type="submit">Exclude friend</button>
+        </form>
       </li>
       {% endfor %}
     </ul>
