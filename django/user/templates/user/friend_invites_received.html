@@ -3,7 +3,7 @@
   {% for invite in user.friend_invites_received.all%}
   <li>
     {{ invite.sender }}
-    <div id="friend-invite-actions" class="verticalButtons">
+    <div id="friend-invite-actions" class="verticalDiv">
       <form method="POST" action="{% url 'respondInvite' invite.id %}">
         {% csrf_token %}
         <button type="submit">Accept request</button>

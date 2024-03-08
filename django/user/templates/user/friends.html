@@ -1,17 +1,25 @@
 <!doctype html>
 <head>
   <style>
-    .verticalButtons {
+    .menuDiv {
       display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
+    .verticalDiv {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
   </style>
 </head>
 <body>
   {% if user.is_authenticated %}
-  <div id="friends-menu" class="verticalButtons">
+  <div id="friends-menu" class="verticalDiv">
     <button onclick="renderSentFriendInvites()">Invites Sent</button>
     <button onclick="renderReceivedFriendInvites()">Invites Received</button>
     <button onclick="renderSendFriendInvites()">Add friends</button>
+    <button onclick="renderFriendList()">Friendlist</button>
   </div>
   <div id="friends-rendered-data"></div>
 
@@ -50,5 +58,49 @@
       });
   }
 
+  function renderFriendList() {
+    fetch("{% url 'friendList' %}")
+      .then((response) => response.text())
+      .then((html) => {
+        const container = document.getElementById("friends-rendered-data");
+        container.innerHTML = html;
+      });
+  }
+
+  let onlineUsers = [];
+
+  const chatSocket = new WebSocket(
+    "ws://" + window.location.host + "/ws/status/",
+  );
+
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    if ("connected_user" in data) {
+      setOnline(data["connected_user"]);
+    } else if ("disconnected_user" in data) {
+      setOffline(data["disconnected_user"]);
+    } else {
+      onlineUsers = data["online_users"];
+      setInitialStatus();
+    }
+  };
+
+  chatSocket.onclose = function (e) {
+    console.error("Chat socket closed unexpectedly");
+  };
+
+  function setInitialStatus() {
+    onlineUsers.forEach((element) => {
+      document.getElementById(element).textContent = "ON";
+    });
+  }
+
+  function setOnline(user) {
+    document.getElementById(user).textContent = "ON";
+  }
+
+  function setOffline(user) {
+    document.getElementById(user).textContent = "OFF";
+  }
   // END \\
 </script>
