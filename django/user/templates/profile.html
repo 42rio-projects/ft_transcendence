@@ -1,0 +1,25 @@
+{% include 'messages.html' %}
+
+<ul>
+    <li>
+        <label>Username:</label>
+        <span>{{ user.username }}</span>
+    </li>
+    {% if user.email %}
+    <li>
+        <label>Email:</label>
+        <span>{{ user.email }}</span>
+        {% if user.email_verified %}
+        <span>Email verified</span>
+        {% else %}
+        <button onclick="fetchHTML('main', 'user/verify_email/')">Verify email</button>
+        {% endif %}
+    </li>
+    {% else %}
+    <li>
+        No email
+    </li>
+    {% endif %}
+</ul>
+
+<button onclick="fetchHTML('main', 'user/edit_profile/')">Edit profile</button>

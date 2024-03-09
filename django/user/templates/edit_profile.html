@@ -1,0 +1,18 @@
+{% include 'messages.html' %}
+
+<form method="post" action="user/edit_profile/" onsubmit="fetchHTMLForm('main', event)">
+    {% csrf_token %}
+    <ul>
+        <li>
+            <label>Username:</label>
+            <input type="text" name="username" placeholder="username" value="{{ username }}" />
+        </li>
+        <li>
+            <label>Email:</label>
+            <input type="email" name="email" placeholder="email" value="{{ email }}" />
+        </li>
+    </ul>
+    <button type="submit">Save</button>
+</form>
+
+<button onclick="fetchHTML('main', 'user/profile/')">Back to profile</button>
