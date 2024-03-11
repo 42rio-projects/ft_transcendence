@@ -5,7 +5,7 @@ urlpatterns = [
     path("friendlist/", views.friendlist, name="friendList"),
     path("friends/", views.friends, name="friends"),
     path(
-        "friendlist/<int:user_id>",
+        "friendlist/<int:user_id>/",
         views.excludeFriend,
         name="excludeFriend"
     ),
@@ -30,7 +30,7 @@ urlpatterns = [
         name="cancelInvite"
     ),
     path(
-        "send-friend-invite",
+        "send-friend-invite/",
         views.sendFriendInvites,
         name="sendFriendInvites"
     ),

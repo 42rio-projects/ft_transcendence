@@ -16,9 +16,13 @@
 <body>
   {% if user.is_authenticated %}
   <div id="friends-menu" class="verticalDiv">
-    <button onclick="renderSentFriendInvites()">Invites Sent</button>
-    <button onclick="renderReceivedFriendInvites()">Invites Received</button>
-    <button onclick="renderSendFriendInvites()">Add friends</button>
+    <button onclick="render({% url 'friendInvitesSent' %})">
+      Invites Sent
+    </button>
+    <button onclick="render({% url 'friendInvitesReceived' %})">
+      Invites Received
+    </button>
+    <button onclick="render({% url 'sendFriendInvites' %})">Add friends</button>
     <button onclick="renderFriendList()">Friendlist</button>
   </div>
   <div id="friends-rendered-data"></div>
@@ -28,6 +32,7 @@
 </body>
 
 <script>
+  // General functions \\
   function handleForm(event) {
     event.preventDefault();
 
@@ -45,35 +50,16 @@
       });
   }
 
+  function render(url) {
+    fetch(url)
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById("friends-rendered-data").innerHTML = data;
+      });
+  }
+  // END \\
+
   // FRIENDS RELATED FUNCTIONS FOR THE SPA \\
-
-  function renderSentFriendInvites() {
-    fetch("{% url 'friendInvitesSent' %}")
-      .then((response) => response.text())
-      .then((html) => {
-        const container = document.getElementById("friends-rendered-data");
-        container.innerHTML = html;
-      });
-  }
-
-  function renderReceivedFriendInvites() {
-    fetch("{% url 'friendInvitesReceived' %}")
-      .then((response) => response.text())
-      .then((html) => {
-        const container = document.getElementById("friends-rendered-data");
-        container.innerHTML = html;
-      });
-  }
-
-  function renderSendFriendInvites() {
-    fetch("{% url 'sendFriendInvites' %}")
-      .then((response) => response.text())
-      .then((html) => {
-        const container = document.getElementById("friends-rendered-data");
-        container.innerHTML = html;
-      });
-  }
-
   async function renderFriendList() {
     await fetch("{% url 'friendList' %}")
       .then((response) => response.text())
