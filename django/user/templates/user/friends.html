@@ -22,7 +22,6 @@
     <button onclick="renderFriendList()">Friendlist</button>
   </div>
   <div id="friends-rendered-data"></div>
-
   {% else %}
   <p>Welcome, new user. Please <a href="/">Login</a></p>
   {% endif %}
@@ -58,13 +57,14 @@
       });
   }
 
-  function renderFriendList() {
-    fetch("{% url 'friendList' %}")
+  async function renderFriendList() {
+    await fetch("{% url 'friendList' %}")
       .then((response) => response.text())
       .then((html) => {
         const container = document.getElementById("friends-rendered-data");
         container.innerHTML = html;
       });
+    setInitialStatus();
   }
 
   let onlineUsers = [];
@@ -85,22 +85,28 @@
     }
   };
 
-  chatSocket.onclose = function (e) {
-    console.error("Chat socket closed unexpectedly");
-  };
+  chatSocket.onclose = function (e) {};
 
   function setInitialStatus() {
     onlineUsers.forEach((element) => {
-      document.getElementById(element).textContent = "ON";
+      try {
+        document.getElementById(element).textContent = "ON";
+      } catch (e) {}
     });
   }
 
   function setOnline(user) {
-    document.getElementById(user).textContent = "ON";
+    try {
+      onlineUsers.push(user);
+      document.getElementById(user).textContent = "ON";
+    } catch (e) {}
   }
 
   function setOffline(user) {
-    document.getElementById(user).textContent = "OFF";
+    try {
+      onlineUsers.splice(onlineUsers.indexOf(user));
+      document.getElementById(user).textContent = "OFF";
+    } catch (e) {}
   }
   // END \\
 </script>

@@ -10,11 +10,11 @@ class statusConsumer(AsyncWebsocketConsumer):
         """Accept connection and broadcast new online list"""
         await self.channel_layer.group_add('status', self.channel_name)
         await self.accept()
-        self.user = self.scope['user']
-        self.online_users.append(self.user.username)
         await self.send(text_data=json.dumps(
             {"online_users": self.online_users})
         )
+        self.user = self.scope['user']
+        self.online_users.append(self.user.username)
         await self.channel_layer.group_send(
             'status',
             {
