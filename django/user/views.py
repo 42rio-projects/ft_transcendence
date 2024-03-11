@@ -18,12 +18,6 @@ def friendlist(request):
     return HttpResponse(template.render(context, request))
 
 
-def friendInvites(request):
-    template = loader.get_template("user/friend_invites.html")
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-
 def friendInvitesSent(request):
     template = loader.get_template("user/friend_invites_sent.html")
     context = {}
@@ -82,3 +76,15 @@ def respondInvite(request, invite_id):
         else:
             raise Exception('Invalid action')
     return redirect('friendInvitesReceived')
+
+
+def cancelInvite(request, invite_id):
+    if request.method == 'POST':
+        invite = get_object_or_404(
+            models.FriendInvite,
+            pk=invite_id,
+        )
+        if invite.sender != request.user:
+            raise PermissionDenied
+        invite.delete()
+    return redirect('friendInvitesSent')

@@ -9,7 +9,6 @@ urlpatterns = [
         views.excludeFriend,
         name="excludeFriend"
     ),
-    path("friend-invites/", views.friendInvites, name="friendInvites"),
     path(
         "friend-invites-sent/",
         views.friendInvitesSent,
@@ -21,9 +20,14 @@ urlpatterns = [
         name="friendInvitesReceived"
     ),
     path(
-        "friend-invites/<int:invite_id>/",
+        "respond-friend-invites/<int:invite_id>/",
         views.respondInvite,
         name="respondInvite"
+    ),
+    path(
+        "cancel-friend-invites/<int:invite_id>/",
+        views.cancelInvite,
+        name="cancelInvite"
     ),
     path(
         "send-friend-invite",
