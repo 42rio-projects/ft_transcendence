@@ -6,18 +6,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import permission_classes, action
-from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 
-@login_required(login_url="login")
 def index(request):
     context = {
         "username": request.user.username
     }
 
     return render(request, "index.html", context)
+
+
+def app(request):
+    return render(request, "app.html")
 
 
 @permission_classes((permissions.AllowAny,))
