@@ -33,6 +33,13 @@
 
 <script>
   // General functions \\
+  window.addEventListener("popstate", handlePopState);
+
+  function handlePopState(event) {
+    console.log("went to page: " + event.state?.view);
+    render(event.state?.view, false);
+  }
+
   function handleForm(event) {
     event.preventDefault();
 
@@ -50,11 +57,14 @@
       });
   }
 
-  function render(url) {
+  function render(url, setPushState = true) {
     fetch(url)
       .then((response) => response.text())
       .then((data) => {
         document.getElementById("friends-rendered-data").innerHTML = data;
+        if (setPushState) {
+          history.pushState({ view: url }, "", url);
+        }
       });
   }
   // END \\
