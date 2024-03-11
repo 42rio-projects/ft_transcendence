@@ -28,6 +28,23 @@
 </body>
 
 <script>
+  function handleForm(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const data = new FormData(form);
+    const url = data.get("url");
+
+    fetch(url, {
+      method: form.method,
+      body: data,
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById("friends-rendered-data").innerHTML = data;
+      });
+  }
+
   // FRIENDS RELATED FUNCTIONS FOR THE SPA \\
 
   function renderSentFriendInvites() {

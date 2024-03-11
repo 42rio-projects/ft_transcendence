@@ -4,15 +4,25 @@
   <li>
     {{ invite.sender }}
     <div id="friend-invite-actions" class="verticalDiv">
-      <form method="POST" action="{% url 'respondInvite' invite.id %}">
+      <form method="POST" onsubmit="handleForm(event)">
         {% csrf_token %}
         <button type="submit">Accept request</button>
         <input type="hidden" name="action" value="accept" />
+        <input
+          type="hidden"
+          name="url"
+          value="{% url 'respondInvite' invite.id %}"
+        />
       </form>
-      <form method="POST" action="{% url 'respondInvite' invite.id %}">
+      <form method="POST" onsubmit="handleForm(event)">
         {% csrf_token %}
         <button type="submit">Reject request</button>
         <input type="hidden" name="action" value="reject" />
+        <input
+          type="hidden"
+          name="url"
+          value="{% url 'respondInvite' invite.id %}"
+        />
       </form>
     </div>
     {% endfor %}

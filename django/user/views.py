@@ -45,13 +45,12 @@ def sendFriendInvites(request):
         )
         try:
             request.user.add_friend(user)
-            return ('Friend invite sent')
+            # add 201 response that is not rendered on the front end
         except Exception as e:
             return HttpResponse(e)
-    else:
-        template = loader.get_template("user/send_friend_invites.html")
-        context = {}
-        return HttpResponse(template.render(context, request))
+    template = loader.get_template("user/send_friend_invites.html")
+    context = {}
+    return HttpResponse(template.render(context, request))
 
 
 def excludeFriend(request, user_id):
@@ -82,4 +81,4 @@ def respondInvite(request, invite_id):
             invite.respond(accepted=False)
         else:
             raise Exception('Invalid action')
-    return redirect('friendInvites')
+    return redirect('friendInvitesReceived')
