@@ -4,12 +4,14 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from .models import User
 from twilio.rest import Client
-
+from .forms import ChangePasswordForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from .forms import UserProfileForm
 
 SERVICE_SID = os.environ["TWILIO_SERVICE_SID"]
 ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_SID"]
 AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
-
 
 def profile(request):
     if request.method == "GET":
@@ -68,6 +70,42 @@ def register(request):
 
     if request.method == "GET":
         return render(request, "register.html")
+
+
+
+@login_required
+def upload_avatar(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user.userprofile)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UserProfileForm(instance=request.user.userprofile)
+    return render(request, 'upload_avatar.html', {'form': form})
+
+
+def change_password(request):
+    if request.method == "POST":
+        form = ChangePasswordForm(request.POST)
+        email_verified = request.user.email_verified
+        if not email_verified:
+            messages.error(request, "You must verify your email before changing your password")
+            return render(request, "change_password.html", {"form": form})
+        if form.is_valid():
+            user = request.user
+            current_password = form.cleaned_data.get("current_password")
+            if (user.check_password(current_password)):
+                new_password = form.cleaned_data.get("new_password")
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, "Password changed successfully")
+            else :
+                form.add_error('current_password', "Senha atual incorreta")
+
+    if request.method == 'GET':
+        form = ChangePasswordForm()
+    return render(request, "change_password.html", {"form": form})
 
 
 def logout(request):

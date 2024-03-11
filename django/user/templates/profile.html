@@ -20,6 +20,16 @@
         No email
     </li>
     {% endif %}
+    <li>
+        <label>Avatar:</label>
+        {% if user.userprofile.avatar %}
+        <img src="{{ user.userprofile.avatar.url }}" alt="Avatar" style="width: 100px; height: 100px;"/>
+        {% else %}
+        <span>No avatar</span>
+        {% endif %}
+    </li>
 </ul>
 
 <button onclick="fetchHTML('main', 'user/edit_profile/')">Edit profile</button>
+<button onclick="fetchHTML('main', 'user/change_password')">Change password</button>
+<button onclick="fetchHTML('main', 'user/upload_avatar')">Update avatar</button>
