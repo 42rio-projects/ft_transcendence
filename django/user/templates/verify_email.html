@@ -1,10 +1,7 @@
 <div id="verify-email">
     {% include 'messages.html' %}
 
-    <form method="post" action="user/receive_email_code/" onsubmit="fetchHTMLForm('verify-email', event)">
-        {% csrf_token %}
-        <button type="submit">Receive code</button>
-    </form>
+    <button onclick="fetchHTML('verify-email', 'user/receive_email_code/')">Receive code</button>
 
     <form method="post" action="user/confirm_email_code/" onsubmit="fetchHTMLForm('verify-email', event)">
         {% csrf_token %}
