@@ -30,90 +30,44 @@
   <div id="friends-rendered-data"></div>
   {% else %}
   <p>Welcome, new user. Please <a href="/">Login</a></p>
-  {% endif %}
-</body>
+  {% endif %} {% load static %}
+  <script src="{% static 'user/js/statusWebSocket.js' %}"></script>
+  <script>
+    window.addEventListener("popstate", handlePopState);
 
-<script>
-  // General functions \\
-  window.addEventListener("popstate", handlePopState);
-
-  async function handlePopState(event) {
-    await render(event.state?.view, false);
-  }
-
-  function handleForm(event) {
-    event.preventDefault();
-
-    const form = event.target;
-    const data = new FormData(form);
-    const url = data.get("url");
-
-    fetch(url, {
-      method: form.method,
-      body: data,
-    })
-      .then((response) => response.text())
-      .then((data) => {
-        document.getElementById("friends-rendered-data").innerHTML = data;
-      });
-  }
-
-  async function render(url, setPushState = true) {
-    fetch(url)
-      .then((response) => response.text())
-      .then((data) => {
-        document.getElementById("friends-rendered-data").innerHTML = data;
-        if (setPushState) {
-          history.pushState({ view: url }, "", url);
-        }
-        if (url == "{% url 'friendList' %}") {
-          setInitialStatus();
-        }
-      });
-  }
-  // END \\
-
-  // FRIENDS RELATED FUNCTIONS FOR THE SPA \\
-  let onlineUsers = [];
-
-  const chatSocket = new WebSocket(
-    "ws://" + window.location.host + "/ws/status/",
-  );
-
-  chatSocket.onmessage = function (e) {
-    const data = JSON.parse(e.data);
-    if ("connected_user" in data) {
-      setOnline(data["connected_user"]);
-    } else if ("disconnected_user" in data) {
-      setOffline(data["disconnected_user"]);
-    } else {
-      onlineUsers = data["online_users"];
-      setInitialStatus();
+    async function handlePopState(event) {
+      await render(event.state?.view, false);
     }
-  };
 
-  chatSocket.onclose = function (e) {};
+    function handleForm(event) {
+      event.preventDefault();
 
-  function setInitialStatus() {
-    onlineUsers.forEach((element) => {
-      try {
-        document.getElementById(element).textContent = "ON";
-      } catch (e) {}
-    });
-  }
+      const form = event.target;
+      const data = new FormData(form);
+      const url = data.get("url");
 
-  function setOnline(user) {
-    try {
-      onlineUsers.push(user);
-      document.getElementById(user).textContent = "ON";
-    } catch (e) {}
-  }
+      fetch(url, {
+        method: form.method,
+        body: data,
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("friends-rendered-data").innerHTML = data;
+        });
+    }
 
-  function setOffline(user) {
-    try {
-      onlineUsers.splice(onlineUsers.indexOf(user));
-      document.getElementById(user).textContent = "OFF";
-    } catch (e) {}
-  }
-  // END \\
-</script>
+    async function render(url, setPushState = true) {
+      fetch(url)
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("friends-rendered-data").innerHTML = data;
+          if (setPushState) {
+            history.pushState({ view: url }, "", url);
+          }
+          if (url == "{% url 'friendList' %}") {
+            statusSocket.setInitialStatus();
+          }
+        });
+    }
+  </script>
+</body>
