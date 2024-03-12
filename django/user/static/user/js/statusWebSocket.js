@@ -21,6 +21,8 @@ class StatusWebSocket {
   onClose(event) {}
 
   setInitialStatus() {
+    let frienlistIsRendered = document.getElementById("Friendlist");
+    if (!frienlistIsRendered) return;
     this.onlineUsers.forEach((element) => {
       try {
         document.getElementById(element).textContent = "ON";
@@ -31,8 +33,10 @@ class StatusWebSocket {
   }
 
   setOnline(user) {
+    this.onlineUsers.push(user);
+    let frienlistIsRendered = document.getElementById("Friendlist");
+    if (!frienlistIsRendered) return;
     try {
-      this.onlineUsers.push(user);
       document.getElementById(user).textContent = "ON";
     } catch (e) {
       console.log(e);
@@ -40,8 +44,10 @@ class StatusWebSocket {
   }
 
   setOffline(user) {
+    this.onlineUsers.splice(this.onlineUsers.indexOf(user));
+    let frienlistIsRendered = document.getElementById("Friendlist");
+    if (!frienlistIsRendered) return;
     try {
-      this.onlineUsers.splice(this.onlineUsers.indexOf(user));
       document.getElementById(user).textContent = "OFF";
     } catch (e) {
       console.log(e);
