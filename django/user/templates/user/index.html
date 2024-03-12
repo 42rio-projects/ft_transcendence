@@ -34,9 +34,15 @@
   <script src="{% static 'user/js/statusWebSocket.js' %}"></script>
   <script>
     window.addEventListener("popstate", handlePopState);
+    history.replaceState(
+      { view: "{% url 'friendsIndex' %}" },
+      "",
+      "{% url 'friendsIndex' %}",
+    );
+    render("{% url 'friendList' %}", false);
 
     async function handlePopState(event) {
-      await render(event.state?.view, false);
+      await render(event.state?.view, false, true);
     }
 
     function handleForm(event) {
@@ -45,7 +51,6 @@
       const form = event.target;
       const data = new FormData(form);
       const url = data.get("url");
-
       fetch(url, {
         method: form.method,
         body: data,
@@ -56,7 +61,12 @@
         });
     }
 
-    async function render(url, setPushState = true) {
+    async function render(url, setPushState = true, isPopState = false) {
+      console.log(url + " == " + window.location.pathname);
+      if (url == window.location.pathname && !isPopState) return;
+      if (url == "{% url 'friendsIndex' %}") {
+        url = "{% url 'friendList' %}";
+      }
       fetch(url)
         .then((response) => response.text())
         .then((data) => {
