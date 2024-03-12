@@ -2,35 +2,35 @@ from django.urls import path
 from user import views
 
 urlpatterns = [
-    path("friendlist/", views.friendlist, name="friendList"),
-    path("friends/", views.friends, name="friends"),
+    path("friends/", views.friends, name="friendsIndex"),
+    path("friends/friendlist/", views.friendlist, name="friendList"),
     path(
-        "friendlist/<int:user_id>/",
+        "friends/exclude/<int:user_id>/",
         views.excludeFriend,
         name="excludeFriend"
     ),
     path(
-        "friend-invites-sent/",
+        "friends/invites-sent/",
         views.friendInvitesSent,
         name="friendInvitesSent"
     ),
     path(
-        "friend-invites-received/",
+        "friends/invites-received/",
         views.friendInvitesReceived,
         name="friendInvitesReceived"
     ),
     path(
-        "respond-friend-invites/<int:invite_id>/",
-        views.respondInvite,
-        name="respondInvite"
+        "friends/respond-invite/<int:invite_id>/",
+        views.respondFriendInvite,
+        name="respondFriendInvite"
     ),
     path(
-        "cancel-friend-invites/<int:invite_id>/",
-        views.cancelInvite,
-        name="cancelInvite"
+        "friends/cancel-invite/<int:invite_id>/",
+        views.cancelFriendInvite,
+        name="cancelFriendInvite"
     ),
     path(
-        "send-friend-invite/",
+        "friends/send-invites/",
         views.sendFriendInvites,
         name="sendFriendInvites"
     ),

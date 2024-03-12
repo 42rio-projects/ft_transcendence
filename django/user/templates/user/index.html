@@ -16,14 +16,16 @@
 <body>
   {% if user.is_authenticated %}
   <div id="friends-menu" class="verticalDiv">
-    <button onclick="render({% url 'friendInvitesSent' %})">
+    <button onclick="render('{% url 'friendInvitesSent' %}')">
       Invites Sent
     </button>
-    <button onclick="render({% url 'friendInvitesReceived' %})">
+    <button onclick="render('{% url 'friendInvitesReceived' %}')">
       Invites Received
     </button>
-    <button onclick="render({% url 'sendFriendInvites' %})">Add friends</button>
-    <button onclick="renderFriendList()">Friendlist</button>
+    <button onclick="render('{% url 'sendFriendInvites' %}')">
+      Add friends
+    </button>
+    <button onclick="render('{% url 'friendList' %}')">Friendlist</button>
   </div>
   <div id="friends-rendered-data"></div>
   {% else %}
@@ -35,9 +37,8 @@
   // General functions \\
   window.addEventListener("popstate", handlePopState);
 
-  function handlePopState(event) {
-    console.log("went to page: " + event.state?.view);
-    render(event.state?.view, false);
+  async function handlePopState(event) {
+    await render(event.state?.view, false);
   }
 
   function handleForm(event) {
@@ -57,7 +58,7 @@
       });
   }
 
-  function render(url, setPushState = true) {
+  async function render(url, setPushState = true) {
     fetch(url)
       .then((response) => response.text())
       .then((data) => {
@@ -65,21 +66,14 @@
         if (setPushState) {
           history.pushState({ view: url }, "", url);
         }
+        if (url == "{% url 'friendList' %}") {
+          setInitialStatus();
+        }
       });
   }
   // END \\
 
   // FRIENDS RELATED FUNCTIONS FOR THE SPA \\
-  async function renderFriendList() {
-    await fetch("{% url 'friendList' %}")
-      .then((response) => response.text())
-      .then((html) => {
-        const container = document.getElementById("friends-rendered-data");
-        container.innerHTML = html;
-      });
-    setInitialStatus();
-  }
-
   let onlineUsers = [];
 
   const chatSocket = new WebSocket(

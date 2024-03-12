@@ -7,7 +7,7 @@ import user.models as models
 
 
 def friends(request):
-    template = loader.get_template('user/friends.html')
+    template = loader.get_template('user/index.html')
     context = {}
     return HttpResponse(template.render(context, request))
 
@@ -19,13 +19,13 @@ def friendlist(request):
 
 
 def friendInvitesSent(request):
-    template = loader.get_template("user/friend_invites_sent.html")
+    template = loader.get_template("user/invites_sent.html")
     context = {}
     return HttpResponse(template.render(context, request))
 
 
 def friendInvitesReceived(request):
-    template = loader.get_template("user/friend_invites_received.html")
+    template = loader.get_template("user/invites_received.html")
     context = {}
     return HttpResponse(template.render(context, request))
 
@@ -42,7 +42,7 @@ def sendFriendInvites(request):
             # add 201 response that is not rendered on the front end
         except Exception as e:
             return HttpResponse(e)
-    template = loader.get_template("user/send_friend_invites.html")
+    template = loader.get_template("user/send_invites.html")
     context = {}
     return HttpResponse(template.render(context, request))
 
@@ -60,7 +60,7 @@ def excludeFriend(request, user_id):
     return redirect('friendList')
 
 
-def respondInvite(request, invite_id):
+def respondFriendInvite(request, invite_id):
     invite = get_object_or_404(
         models.FriendInvite,
         pk=invite_id,
@@ -78,7 +78,7 @@ def respondInvite(request, invite_id):
     return redirect('friendInvitesReceived')
 
 
-def cancelInvite(request, invite_id):
+def cancelFriendInvite(request, invite_id):
     if request.method == 'POST':
         invite = get_object_or_404(
             models.FriendInvite,
