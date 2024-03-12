@@ -46,9 +46,17 @@ class statusConsumer(AsyncWebsocketConsumer):
     async def user_connected(self, event):
         """Send updated online list to websocket"""
         username = event['username']
-        await self.send(text_data=json.dumps({"connected_user": username}))
+        if username == self.user.username:
+            pass
+        else:
+            await self.send(text_data=json.dumps({"connected_user": username}))
 
     async def user_disconnected(self, event):
         """Send updated online list to websocket"""
         username = event['username']
-        await self.send(text_data=json.dumps({"disconnected_user": username}))
+        if username == self.user.username:
+            pass
+        else:
+            await self.send(
+                text_data=json.dumps({"disconnected_user": username})
+            )
