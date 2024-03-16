@@ -1,8 +1,22 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from user.models import User
-from .models import UserProfile
+import user.models as models
 
-admin.site.register(User, UserAdmin)
+class IsFriendsWithInline(admin.TabularInline):
+    model = models.IsFriendsWith
+    fk_name = 'user1'
 
-admin.site.register(UserProfile)
+
+class IsBlockedByInline(admin.TabularInline):
+    model = models.IsBlockedBy
+    fk_name = 'blocker'
+
+
+class UserAdm(UserAdmin):
+    inlines = [IsFriendsWithInline, IsBlockedByInline]
+
+
+admin.site.register(models.User, UserAdm)
+admin.site.register(models.IsFriendsWith)
+admin.site.register(models.IsBlockedBy)
+admin.site.register(models.FriendInvite)

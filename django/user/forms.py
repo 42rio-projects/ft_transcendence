@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.password_validation import validate_password
-from .models import UserProfile
+from .models import User
 
 class ChangePasswordForm(forms.Form):
 	current_password = forms.CharField(label="Current password", widget=forms.PasswordInput)
@@ -20,5 +20,5 @@ class ChangePasswordForm(forms.Form):
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
-        model = UserProfile
+        model = User
         fields = ['avatar']

@@ -1,6 +1,6 @@
 {% include 'messages.html' %}
 
-<form method="post" action="user/edit_profile/" onsubmit="fetchHTMLForm('main', event)">
+<form method="post" action="edit_profile/" onsubmit="fetchHTMLForm('main', event)">
     {% csrf_token %}
     <ul>
         <li>
@@ -15,4 +15,4 @@
     <button type="submit">Save</button>
 </form>
 
-<button onclick="fetchHTML('main', 'user/profile/')">Back to profile</button>
+<button onclick="fetchHTML('main', 'profile/')">Back to profile</button>
