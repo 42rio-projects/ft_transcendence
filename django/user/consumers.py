@@ -10,11 +10,11 @@ class statusConsumer(AsyncWebsocketConsumer):
         """Accept connection and broadcast new online list"""
         await self.channel_layer.group_add('status', self.channel_name)
         await self.accept()
-        self.user = self.scope['user']
-        self.online_users.append(self.user.username)
         await self.send(text_data=json.dumps(
             {"online_users": self.online_users})
         )
+        self.user = self.scope['user']
+        self.online_users.append(self.user.username)
         await self.channel_layer.group_send(
             'status',
             {
@@ -46,9 +46,17 @@ class statusConsumer(AsyncWebsocketConsumer):
     async def user_connected(self, event):
         """Send updated online list to websocket"""
         username = event['username']
-        await self.send(text_data=json.dumps({"connected_user": username}))
+        if username == self.user.username:
+            pass
+        else:
+            await self.send(text_data=json.dumps({"connected_user": username}))
 
     async def user_disconnected(self, event):
         """Send updated online list to websocket"""
         username = event['username']
-        await self.send(text_data=json.dumps({"disconnected_user": username}))
+        if username == self.user.username:
+            pass
+        else:
+            await self.send(
+                text_data=json.dumps({"disconnected_user": username})
+            )
