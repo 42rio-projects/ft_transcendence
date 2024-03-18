@@ -32,6 +32,23 @@ def chatList(request):
     # return http.HttpResponse(template.render(context, request))
 
 
+def chatRoom(request, id):
+    chat = get_object_or_404(models.Chat, pk=id)
+    if chat.starter != request.user and chat.receiver != request.user:
+        return HttpResponse(status_code=403)
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        try:
+            models.Message(
+                content=content, sender=request.user, chat=chat
+            ).save()
+        except Exception as e:
+            return HttpResponse(e)
+    template = loader.get_template('chat/chat.html')
+    context = {"chat": chat}
+    return HttpResponse(template.render(context, request))
+
+
 def startChat(request):
     if request.method == 'POST':
         name = request.POST.get('username')

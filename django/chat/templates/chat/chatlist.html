@@ -2,9 +2,15 @@
   <h2>Chats</h2>
   <ul id="ChatList">
     {% for chat in user.get_chats %} {% if user == chat.starter %}
-    <li>{{ chat.receiver.username}}</li>
+    <li id="{{ chat.id }}">{{ chat.receiver.username}}</li>
+    <button onclick="render('{% url 'chatRoom' id=chat.id %}')">
+      send message
+    </button>
     {% else %}
     <li>{{ chat.starter.username}}</li>
+    <button onclick="render('{% url 'chatRoom' id=chat.id %}')">
+      send message
+    </button>
     {% endif %} {% endfor %}
   </ul>
 </div>

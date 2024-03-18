@@ -11,6 +11,7 @@ urlpatterns = [
     path("chat/", views.chatIndex, name="chatIndex"),
     path("chat/list", views.chatList, name="chatList"),
     path("chat/new-chat", views.startChat, name="startChat"),
+    path("chat/<int:id>", views.chatRoom, name="chatRoom"),
     path("chat/<str:room_name>/", views.room, name="room"),
 ]
 
