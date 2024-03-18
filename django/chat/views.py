@@ -1,17 +1,27 @@
 import chat.serializers as serializers
 # import django.http as http
 # from django.template import loader
-from chat.models import Chat, Message, User
+from chat.models import Chat, Message
+from user.models import User
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import render
-from django.db.models import Prefetch
+from django.template import loader
+from django.http import HttpResponse
 
 
-def list(request):
-    return render(request, "chat/list.html")
+def chatIndex(request):
+    template = loader.get_template('chat/index.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+
+def chatList(request):
+    template = loader.get_template('chat/chatlist.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
     # chats = Chat.objects.all()  # Should filter by chats the user is in
     # template = loader.get_template("chat/list.html")
     # context = {

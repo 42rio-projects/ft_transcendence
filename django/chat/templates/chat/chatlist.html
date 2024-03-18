@@ -1,0 +1,10 @@
+<div>
+  <h2>Chats</h2>
+  <ul id="ChatList">
+    {% for chat in user.get_chats %} {% if user == chat.starter %}
+    <li>{{ chat.receiver.username}}</li>
+    {% else %}
+    <li>{{ chat.starter.username}}</li>
+    {% endif %} {% endfor %}
+  </ul>
+</div>

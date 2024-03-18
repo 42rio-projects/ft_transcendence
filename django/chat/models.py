@@ -1,15 +1,14 @@
 from django.db import models
-from user.models import User
 
 
 class Chat(models.Model):
     starter = models.ForeignKey(
-        User,
+        'user.User',
         on_delete=models.CASCADE,
         related_name='started_chats'
     )
     receiver = models.ForeignKey(
-        User,
+        'user.User',
         on_delete=models.CASCADE,
         related_name='received_chats'
     )
@@ -40,7 +39,10 @@ class Message(models.Model):
     content = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
     sender = models.ForeignKey(
-        User, null=True, on_delete=models.SET_NULL, related_name="messages"
+        'user.User',
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="messages"
     )
     chat = models.ForeignKey(
         Chat, on_delete=models.CASCADE, related_name="messages"
