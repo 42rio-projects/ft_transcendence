@@ -1,8 +1,5 @@
-import chat.serializers as serializers
 # import django.http as http
 # from django.template import loader
-from chat.models import Chat, Message
-from user.models import User
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -10,6 +7,11 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+
+from user.models import User
+import chat.serializers as serializers
+import chat.models as models
 
 
 def chatIndex(request):
@@ -30,6 +32,23 @@ def chatList(request):
     # return http.HttpResponse(template.render(context, request))
 
 
+def startChat(request):
+    if request.method == 'POST':
+        name = request.POST.get('username')
+        user = get_object_or_404(
+            User,
+            username=name,
+        )
+        try:
+            models.Chat(starter=request.user, receiver=user).save()
+            # add 201 response that is not rendered on the front end
+        except Exception as e:
+            return HttpResponse(e)
+    template = loader.get_template("chat/start_chat.html")
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+
 def room(request, room_name):
     return render(request, "chat/room.html", {"room_name": room_name})
     # try:
@@ -44,7 +63,7 @@ def room(request, room_name):
 
 
 class ChatViewSet(viewsets.ModelViewSet):
-    queryset = Chat.objects.all()
+    queryset = models.Chat.objects.all()
     serializer_class = serializers.ChatSerializer
     permission_classes = [IsAuthenticated]
 
@@ -76,7 +95,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        queryset = Message.objects.all().order_by('-date')
+        queryset = models.Message.objects.all().order_by('-date')
         chat_name = self.request.query_params.get('chat')
         if chat_name is not None:
             queryset = queryset.filter(chat=chat_name)
