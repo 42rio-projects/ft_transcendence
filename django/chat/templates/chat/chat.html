@@ -14,8 +14,3 @@
     <button type="submit">Send</button>
   </form>
 </div>
-{% load static %}
-<script src="{% static 'chat/js/messageWebSocket.js' %}"></script>
-<script>
-  const messageSocket = new MessageWebSocket("{{ chat.id }}");
-</script>
