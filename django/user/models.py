@@ -4,6 +4,7 @@ from django.db.models import Q
 
 from relations.models import IsFriendsWith
 from relations.models import FriendInvite
+from chat.models import Chat
 
 
 class User(AbstractUser):
@@ -35,6 +36,12 @@ class User(AbstractUser):
             elif friendship.user2 != self:
                 friends.append(friendship.user2)
         return friends
+
+    def get_chats(self):
+        chats = Chat.objects.filter(
+            Q(starter=self) | Q(receiver=self)
+        ).prefetch_related('starter', 'receiver')
+        return chats
 
     def add_friend(self, user):
         FriendInvite(sender=self, receiver=user).save()
