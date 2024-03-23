@@ -25,18 +25,17 @@ def login(request):
             username=username, password=password)
         if user:
             django_login(request, user)
-            messages.success(request, "You are now logged in")
-            return redirect("main")
-
-        messages.error(request, "Incorrect username or password")
+            return redirect("home")
 
         data = {
+            "error": "Incorrect username or password",
             "username": username,
             "password": password
         }
 
     elif request.method == "GET":
         data = {
+            "error": "",
             "username": "",
             "password": ""
         }

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import pong.serializers as serializers
 import pong.models as models
 from rest_framework import viewsets, permissions
@@ -11,13 +11,13 @@ from rest_framework.decorators import permission_classes, action
 
 
 def index(request):
-    if request.method == "GET":
-        return render(request, "index.html")
+    return render(request, "index.html")
 
 
-def main(request):
-    if request.method == "GET":
-        return render(request, "main.html")
+def home(request):
+    if request.user.is_authenticated:
+        return render(request, "home.html")
+    return redirect("login")
 
 
 @permission_classes((permissions.AllowAny,))

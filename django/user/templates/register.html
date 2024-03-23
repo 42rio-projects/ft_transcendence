@@ -1,11 +1,38 @@
-{% include 'messages.html' %}
-
-<form method="post" action="user/register/" onsubmit="fetchHTMLForm('main', event)">
+<h1 class="welcome">Welcome to transcendence</h1>
+<form class="auth-form" method="post" action="user/register/" onsubmit="fetchHTMLForm('main', event)">
     {% csrf_token %}
-    <input type="text" name="username" placeholder="username" value="{{ username }}" />
-    <input type="password" name="password" placeholder="password" value="{{ password }}" />
-    <input type="password" name="confirm_password" placeholder="confirm password" value="{{ confirm_password }}" />
-    <button type="submit">Register</button>
-</form>
+    {% if username_error %}
+    <span class="auth-input-error">{{ username_error }}</span>
+    {% endif %}
+    <input class="auth-input" type="text" name="username" placeholder="username" value="{{ username }}" />
 
-<p>Already have an account? <button onclick="fetchHTML('main', 'user/login/')">Login</button></p>
+    {% if password_error %}
+    <span class="auth-input-error">{{ password_error }}</span>
+    {% endif %}
+    <input class="auth-input" type="password" name="password" placeholder="password" value="{{ password }}" />
+
+    {% if confirm_password_error %}
+    <span class="auth-input-error">{{ confirm_password_error }}</span>
+    {% endif %}
+    <input class="auth-input" type="password" name="confirm_password" placeholder="confirm password"
+        value="{{ confirm_password }}" />
+
+    <button class="auth-button" type="submit">Register</button>
+
+    <span class="auth-msg">Already have an account?
+        <a class="auth-anchor" onclick="fetchHTML('main', 'user/login/')">Login</a>
+    </span>
+</form>
+<!-- grid arcade -->
+<div class="grid-bg-container">
+    <div class="grid-bg"></div>
+</div>
+<div class="grid-layer0">
+    <div class="grid-layer1">
+        <div class="grid-layer2">
+            <div class="grid-lines">
+                <div class="grid-light"></div>
+            </div>
+        </div>
+    </div>
+</div>
