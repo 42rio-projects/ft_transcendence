@@ -5,9 +5,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db.models import Q
 from django.core.exceptions import ValidationError
+from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
     email_verified = models.BooleanField(default=False)
+    mobile_number = PhoneNumberField(blank=True, region='BR', help_text='Número de celular')
     friends = models.ManyToManyField(
         'self',
         through="IsFriendsWith",
@@ -24,7 +26,7 @@ class User(AbstractUser):
         symmetrical=False,
         related_name='friend_invites_set'
     )
-    avatar = models.ImageField(upload_to='user/avatars/', null=True, blank=True)
+    avatar = models.ImageField(upload_to='user/avatars/', null=True, blank=True, default='user/avatars/default.png')
 
     def get_friends(self):
         friendships = IsFriendsWith.objects.filter(
