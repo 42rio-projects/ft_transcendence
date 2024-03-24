@@ -1,5 +1,57 @@
 <div class="home">
-    <span>Welcome, {{ user.username }}</span>
-    <button onclick="fetchHTML('main', 'user/profile/')">Profile</button>
-    <button onclick="fetchHTML('main', 'user/logout/')">Logout</button>
+    <h1 class="welcome">Welcome, {{ user.username }}</h1>
+
+    <div class="home-actions">
+        <button class="home-button" onclick="fetchHTML('main', 'user/pong/')">
+            <img class="home-button-icon" src="static/images/pong.svg" alt="Pong" />
+        </button>
+        <button class="home-button" onclick="fetchHTML('main', 'user/profile/')">
+            <img class="home-button-icon" src="static/images/profile.svg" alt="Profile" />
+        </button>
+        <button class="home-button" onclick="fetchHTML('main', 'user/logout/')">
+            <img class="home-button-icon" src="static/images/logout.svg" alt="Logout" />
+        </button>
+    </div>
+
+    <div class="home-activities">
+        <ul class="friends-status">
+            <li>
+                <span>lfarias</span>
+                <div class="green-circle"></div>
+            </li>
+            <li>
+                <span>dvargas</span>
+                <div class="green-circle"></div>
+            </li>
+            <li>
+                <span>gcorreia</span>
+                <div class="yellow-circle"></div>
+            </li>
+            <li>
+                <span>vsergio</span>
+                <div class="red-circle"></div>
+            </li>
+            <li>
+                <span>gguedes</span>
+                <div class="red-circle"></div>
+            </li>
+        </ul>
+
+        <div class="game-history">
+        </div>
+    </div>
+</div>
+
+<!-- grid arcade -->
+<div class="grid-bg-container">
+    <div class="grid-bg"></div>
+</div>
+<div class="grid-layer0">
+    <div class="grid-layer1">
+        <div class="grid-layer">
+            <div class="grid-lines">
+                <div class="grid-light"></div>
+            </div>
+        </div>
+    </div>
 </div>
