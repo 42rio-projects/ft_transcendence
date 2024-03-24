@@ -33,7 +33,8 @@ a {
   justify-content: flex-end;
 	margin-right: 10px;
   height: 100vh;
-  overflow: hidden;
+  background-color: green;
+  position: relative;
 }
 
 .chatList{
@@ -42,7 +43,6 @@ a {
 	margin-left: 10px;
 	padding: 1%;
   height: 100vh;
-
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -104,8 +104,6 @@ a {
   background-color: #3f3d3d; /* Cor de fundo */
 }
 
-
- /* inicio do codigo velho */
 .chatform{
   background-color: #0a0a0a;
   padding: 10px 10px;
@@ -128,7 +126,26 @@ a {
   font-size: 1rem;
  }
 
-.chatSpace > p {
+.formSpace {
+  display:block;
+  align-self: baseline;
+  width: 100%;
+  margin-top: 10px;
+  position: absolute;
+  bottom: 0;
+}
+
+.renderChat {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  margin-bottom: 10%;
+
+}
+
+.renderChat > p {
   padding: 5px;
   width: 100%;
   max-width: 200px;
@@ -137,6 +154,25 @@ a {
   margin-bottom: 10px;
   line-height: 22px;
 }
+
+.newRenderChat {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  margin-bottom: 10%;
+}
+
+.newRenderChat > p {
+  padding: 5px;
+  width: 100%;
+  max-width: 200px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  line-height: 22px;
+}
+
 
 .messageSelf {
   background-color: #f2f2f2;

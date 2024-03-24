@@ -25,7 +25,6 @@
       </ul>
       <button class="startChatBtn" onclick="render('{% url 'startChat' %}')">start new chat</button>
     </div>
-    <!-- <button onclick="render('{% url 'chatList' %}')">My chats</button> -->
   </div>
   <!-- Caso usuário não esteja logado -->
   {% else %}
@@ -49,22 +48,25 @@
       await render(event.state?.view, false, true);
     }
 
-    function handleForm(event) {
-      event.preventDefault();
-      const form = event.target;
-      const data = new FormData(form);
-      const url = data.get("url");
-      fetch(url, {
-        method: form.method,
-        body: data,
-      })
-        .then((response) => response.text())
-        .then((data) => {
-          document.getElementById("chats-rendered-data").innerHTML = data;
-        });
-    }
+    // function handleForm(event) {
+    //   event.preventDefault();
+    //   const form = event.target;
+    //   const data = new FormData(form);
+    //   const url = data.get("url");
+    //   fetch(url, {
+    //     method: form.method,
+    //     body: data,
+    //   })
+    //     .then((response) => response.text())
+    //     .then((data) => {
+    //       const container = document.querySelector('.renderChat');
+    //   // Adiciona o conteúdo retornado pela requisição fetch à div selecionada
+    //   container.innerHTML = data;
+    //       // document.getElementById("chats-rendered-data").innerHTML = data;
+    //     });
+    // }
 
-    async function render(url) {
+    async function render(url, setPushState = true, isPopState = false) {
       if (url == window.location.pathname && !isPopState) return;
       url = get_url(url);
       const html = await get_html(url);
