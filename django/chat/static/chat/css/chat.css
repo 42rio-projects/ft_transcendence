@@ -20,29 +20,28 @@ a {
 
 .chatTotal {
 	display: flex;
-	flex-direction: row;
-	align-items: stretch;
 	justify-content: space-around;
-	width: 100%;
-	height: 100%;
 	background-color: #eb0f0f;
+  width: 100%;
 }
 
 .chatSpace {
+  flex-grow: 1;
 	display: flex;
-	flex: 1;
   flex-direction: column;
   padding: 10px;
   justify-content: flex-end;
-  flex-grow: 1;
 	margin-right: 10px;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .chatList{
 	background-color: #585758;
-	width: 30%;
+	width: 25%;
 	margin-left: 10px;
 	padding: 1%;
+  height: 100vh;
 }
 
 .chat-input {
