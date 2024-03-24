@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login as django_login, logout as d
 from .models import User
 from twilio.rest import Client
 from .forms import ChangePasswordForm
+from .forms import EmailChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
@@ -112,6 +113,50 @@ def change_password(request):
     return render(request, "change_password.html", {"form": form})
 
 
+def email_change(request):
+
+    if request.method == "GET":
+        form = EmailChangeForm()
+        return render(request, "email_change_form.html", {"form": form})
+
+    if request.method == "POST":
+        form = EmailChangeForm(request.POST)
+        if form.is_valid():
+            newEmail = form.cleaned_data.get("new_email")
+            if User.objects.filter(email=newEmail).exists():
+                messages.error(request, "Email already in use")
+                return render(request, "email_change_form.html", {"form": form})
+            request.session['new_email'] = newEmail
+
+            verification = Client(ACCOUNT_SID, AUTH_TOKEN).verify.v2.services(
+                SERVICE_SID).verifications.create(to=newEmail, channel="email")
+
+            if verification.status == "pending":
+                messages.success(request, f'Um código de verificação foi enviado para o email {newEmail}.')
+                return render(request, "email_change_check_form.html")
+
+        messages.error(request, 'Dados inválidos.')
+        form = EmailChangeForm()
+        return render(request, "email_change_form.html", {"form": form})
+
+def email_change_check(request):
+
+    code = request.POST.get("code")
+    newEmail = request.session.get('new_email')
+    verification = Client(ACCOUNT_SID, AUTH_TOKEN).verify.v2.services(
+        SERVICE_SID).verification_checks.create(to=newEmail, code=code)
+
+    if verification.status == "approved":
+        user = request.user
+        user.email = newEmail
+        user.email_verified = True
+        user.save()
+        messages.success(request, 'Seu e-mail foi atualizado com sucesso.')
+        return redirect("profile")
+
+    messages.error(request, 'Código de verificação inválido.')
+    return render(request, "email_change_check_form.html")
+
 def logout(request):
     if request.method == "GET":
         django_logout(request)
@@ -123,7 +168,6 @@ def edit_profile(request):
     if request.method == "POST":
         user = request.user
         username = request.POST.get("username")
-        email = request.POST.get("email")
 
         if username != user.username:
             if User.objects.filter(username=username).exists():
@@ -136,36 +180,31 @@ def edit_profile(request):
 
                 messages.success(request, "Username changed successfully")
 
-        if email != user.email:
-            if User.objects.filter(email=email).exists():
-                messages.error(request, "Email already in use")
-            elif len(email) < 3:
-                messages.error(request, "Email must be at least 3 characters")
-            else:
-                user.email = email
-                user.email_verified = False
+        if not user.email_verified:
+            email = request.POST.get("email")
 
-                messages.success(request, "Email changed successfully")
+            if email != user.email:
+                if User.objects.filter(email=email).exists():
+                    messages.error(request, "Email already in use")
+                elif len(email) < 3:
+                    messages.error(request, "Email must be at least 3 characters")
+                else:
+                    user.email = email
+                    user.email_verified = False
+
+                    messages.success(request, "Email changed successfully")
 
         user.save()
 
-        return render(request, "edit_profile.html",
-                      {"username": username,
-                       "email": email})
+        return render(request, "edit_profile.html", {"username": user.username, "email": user.email})
 
     if request.method == "GET":
         return render(request, "edit_profile.html",
                       {"username": request.user.username,
                        "email": request.user.email})
 
-
-def verify_email(request):
+def email_verify_code(request):
     if request.method == "GET":
-        return render(request, "verify_email.html")
-
-
-def receive_email_code(request):
-    if request.method == "POST":
         user = request.user
 
         verification = Client(ACCOUNT_SID, AUTH_TOKEN).verify.v2.services(
@@ -174,14 +213,14 @@ def receive_email_code(request):
         status = verification.status
 
         if status == "pending":
-            messages.success(request, "Verification code sent")
-            return render(request, "verify_email.html")
+            messages.success(request, "Verification code sent to your email!")
+            return render(request, "email_verify_check_form.html")
 
-        messages.error(request, f"Verification code {status}")
-        return render(request, "verify_email.html")
+        messages.error(request, "Error sending verification code")
+        return render(request, "profile.html")
 
 
-def confirm_email_code(request):
+def email_verify_check(request):
     if request.method == "POST":
         user = request.user
         code = request.POST.get("code")
@@ -191,16 +230,17 @@ def confirm_email_code(request):
 
         status = verification.status
 
+        print("Status value: ", status)
+
         if status == "approved":
             user.email_verified = True
             user.save()
 
-            messages.success(request, "Verification code approved")
+            messages.success(request, "Email verified!")
             return redirect("profile")
 
-        messages.error(request, f"Verification code {status}")
-        return render(request, "verify_email.html",
-                      {"code": code})
+        messages.error(request, "Wrong verification code")
+        return render(request, "email_verify_check_form.html")
 
 
 def friends(request):

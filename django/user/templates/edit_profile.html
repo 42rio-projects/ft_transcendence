@@ -7,10 +7,12 @@
             <label>Username:</label>
             <input type="text" name="username" placeholder="username" value="{{ username }}" />
         </li>
+        {% if not user.email_verified %}
         <li>
             <label>Email:</label>
             <input type="email" name="email" placeholder="email" value="{{ email }}" />
         </li>
+        {% endif %}
     </ul>
     <button type="submit">Save</button>
 </form>

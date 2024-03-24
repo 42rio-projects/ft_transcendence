@@ -12,7 +12,7 @@
         {% if user.email_verified %}
         <span>Email verified</span>
         {% else %}
-        <button onclick="fetchHTML('main', 'verify_email/')">Verify email</button>
+        <button onclick="fetchHTML('main', 'email_verify_code/')">Verify email</button>
         {% endif %}
     </li>
     {% else %}
@@ -30,6 +30,11 @@
     </li>
 </ul>
 
+{% if user.email and user.email_verified %}
+<button onclick="fetchHTML('main', 'email_change/')">Change email</button>
+{% endif %}
+
 <button onclick="fetchHTML('main', 'edit_profile/')">Edit profile</button>
+
 <button onclick="fetchHTML('main', 'change_password')">Change password</button>
 <button onclick="fetchHTML('main', 'upload_avatar')">Update avatar</button>

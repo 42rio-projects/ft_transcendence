@@ -12,11 +12,13 @@ urlpatterns = [
     path('upload_avatar', views.upload_avatar, name='upload_avatar'),
     path('change_password', views.change_password, name='change_password'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
-    path('verify_email/', views.verify_email, name='verify_email'),
-    path('receive_email_code/', views.receive_email_code,
-         name='receive_email_code'),
-    path('confirm_email_code/', views.confirm_email_code,
-         name='confirm_email_code'),
+
+    path('email_verify_code/', views.email_verify_code, name='email_verify_code'),
+    path('email_verify_check/', views.email_verify_check, name='email_verify_check'),
+
+    path('email_change/', views.email_change, name='email_change'),
+    path('email_change_check/', views.email_change_check, name='email_change_check'),
+
     path("friends/", views.friends, name="friendsIndex"),
     path("friends/friendlist/", views.friendlist, name="friendList"),
     path(
