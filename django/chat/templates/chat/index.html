@@ -9,13 +9,16 @@
   {% if user.is_authenticated %}
   <div class="chatTotal">
     <!-- chat será renderizado nessa div -->
-    <div id="chats-rendered-data" class="chatSpace"></div>
+    <div id="chats-rendered-data" class="chatSpace">
+      <div class="welcomeChat"> Bem vindo ao chat, {{ user.username }} escolha um chat para começar</div>
+    </div>
     <div class="chatList">
       <h2>Chats ativos</h2>
       <ul class="chatList-ul">
         {% for chat in user.get_chats %}
         {% if user == chat.starter %}
-        <button id="{{ chat.id }}" onclick="render('{% url 'chatRoom' id=chat.id %}')"> {{chat.receiver.username}}</button>
+        <button id="{{ chat.id }}" onclick="render('{% url 'chatRoom' id=chat.id %}')">
+          {{chat.receiver.username}}</button>
         {% else %}
         <button onclick="render('{% url 'chatRoom' id=chat.id %}')"> {{ chat.starter.username}} </button>
         {% endif %} {% endfor %}
@@ -70,6 +73,31 @@
         history.pushState({ view: url }, "", url);
       }
       handleSockets(url);
+    }
+
+    async function renderNewChat(url) {
+      if (url == window.location.pathname && !isPopState) return;
+      url = get_url(url);
+      const html = await get_html(url);
+
+      // Exibir o modal
+      const modal = document.getElementById('modal');
+      modal.style.display = 'block';
+
+      // Inserir o HTML retornado dentro do modal
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = html;
+
+      if (setPushState) {
+        history.pushState({ view: url }, "", url);
+      }
+      handleSockets(url);
+    }
+
+    function closeModal() {
+      // Fechar o modal
+      const modal = document.getElementById('modal');
+      modal.style.display = 'none';
     }
 
     function handleSockets(url) {
