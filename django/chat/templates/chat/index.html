@@ -17,7 +17,7 @@
       <ul class="chatList-ul">
         {% for chat in user.get_chats %}
         {% if user == chat.starter %}
-        <button id="{{ chat.id }}" onclick="render('{% url 'chatRoom' id=chat.id %}')">
+        <button id="{{ chat.id }}" onclick="render(this, '{% url 'chatRoom' id=chat.id %}')">
           {{chat.receiver.username}}</button>
         {% else %}
         <button onclick="render('{% url 'chatRoom' id=chat.id %}')"> {{ chat.starter.username}} </button>
@@ -64,7 +64,7 @@
         });
     }
 
-    async function render(url) {
+    async function render(button, url) {
       if (url == window.location.pathname && !isPopState) return;
       url = get_url(url);
       const html = await get_html(url);
@@ -73,31 +73,6 @@
         history.pushState({ view: url }, "", url);
       }
       handleSockets(url);
-    }
-
-    async function renderNewChat(url) {
-      if (url == window.location.pathname && !isPopState) return;
-      url = get_url(url);
-      const html = await get_html(url);
-
-      // Exibir o modal
-      const modal = document.getElementById('modal');
-      modal.style.display = 'block';
-
-      // Inserir o HTML retornado dentro do modal
-      const modalContent = document.getElementById('modal-content');
-      modalContent.innerHTML = html;
-
-      if (setPushState) {
-        history.pushState({ view: url }, "", url);
-      }
-      handleSockets(url);
-    }
-
-    function closeModal() {
-      // Fechar o modal
-      const modal = document.getElementById('modal');
-      modal.style.display = 'none';
     }
 
     function handleSockets(url) {
