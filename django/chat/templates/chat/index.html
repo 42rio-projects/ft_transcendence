@@ -17,7 +17,7 @@
       <ul class="chatList-ul">
         {% for chat in user.get_chats %}
         {% if user == chat.starter %}
-        <button id="{{ chat.id }}" onclick="render(this, '{% url 'chatRoom' id=chat.id %}')">
+        <button id="{{ chat.id }}" onclick="render('{% url 'chatRoom' id=chat.id %}')">
           {{chat.receiver.username}}</button>
         {% else %}
         <button onclick="render('{% url 'chatRoom' id=chat.id %}')"> {{ chat.starter.username}} </button>
@@ -64,7 +64,7 @@
         });
     }
 
-    async function render(button, url) {
+    async function render(url) {
       if (url == window.location.pathname && !isPopState) return;
       url = get_url(url);
       const html = await get_html(url);
