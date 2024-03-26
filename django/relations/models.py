@@ -88,14 +88,14 @@ class FriendInvite(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Overridden save method to enforce validation and superclass save.
+        Overridden save method to enforce validation
         """
         self.clean()
         invite = FriendInvite.objects.filter(
             sender=self.receiver, receiver=self.sender
         )
         if invite.exists():
-            invite[0].accept()
+            invite[0].respond(accepted=True)
         else:
             super().save(*args, **kwargs)
 
