@@ -48,8 +48,15 @@ class User(AbstractUser):
         return blocked_users
 
     def get_chats(self):
-        chats = Chat.objects.filter(
+        blocked_users = self.get_blocks()
+        excluded_chats = Chat.objects.filter(
+            Q(starter__in=blocked_users) | Q(receiver__in=blocked_users)
+        )
+        self_chats = Chat.objects.filter(
             Q(starter=self) | Q(receiver=self)
+        )
+        chats = self_chats.exclude(
+            pk__in=excluded_chats
         ).prefetch_related('starter', 'receiver')
         return chats
 
