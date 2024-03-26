@@ -49,6 +49,14 @@ class IsBlockedBy(models.Model):
         related_name='blocked_by'
     )
 
+    def save(self, *args, **kwargs):
+        friendship = IsFriendsWith.objects.filter(
+            user1=self.blocker, user2=self.blocked
+        )
+        if friendship.exists():
+            friendship[0].delete()
+        super().save(*args, **kwargs)
+
     class Meta:
         constraints = [
             models.UniqueConstraint(

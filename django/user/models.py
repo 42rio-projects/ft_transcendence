@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
 
 from relations.models import IsFriendsWith
+from relations.models import IsBlockedBy
 from relations.models import FriendInvite
 from chat.models import Chat
 
@@ -37,6 +38,15 @@ class User(AbstractUser):
                 friends.append(friendship.user2)
         return friends
 
+    def get_blocks(self):
+        blocks = IsBlockedBy.objects.filter(
+            Q(blocker=self)
+        ).prefetch_related('blocked')
+        blocked_users = []
+        for block in blocks:
+            blocked_users.append(block.blocked)
+        return blocked_users
+
     def get_chats(self):
         chats = Chat.objects.filter(
             Q(starter=self) | Q(receiver=self)
@@ -53,3 +63,11 @@ class User(AbstractUser):
         )
         if friendship.exists():
             friendship[0].delete()
+
+    def block_user(self, user):
+        IsBlockedBy(blocker=self, blocked=user).save()
+
+    def unblock_user(self, user):
+        block = IsBlockedBy.objects.filter(Q(blocker=self, blocked=user))
+        if block.exists():
+            block[0].delete()
