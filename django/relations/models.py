@@ -15,14 +15,25 @@ class IsFriendsWith(models.Model):
         related_name='user2'
     )
 
-    def save(self, *args, **kwargs):
+    def clean(self):
+        """
+        Validation to prevent duplicate entries and blocked friends
+        """
+        if IsBlockedBy.objects.filter(
+            Q(blocker=self.user1, blocked=self.user2) |
+            Q(blocker=self.user2, blocked=self.user1)
+        ).exists():
+            raise ValidationError(
+                "Unable to add someone who you blocked or has you blocked"
+            )
         if IsFriendsWith.objects.filter(
                 user1=self.user2, user2=self.user1
         ).exists():
-            # Friendship already exists, don't create a duplicate entry
-            pass
-        else:
-            super().save(*args, **kwargs)
+            raise ValidationError("Friendship already exists")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     class Meta:
         constraints = [
@@ -86,6 +97,13 @@ class FriendInvite(models.Model):
         """
         Custom validation to prevent sending invites to friends.
         """
+        if IsBlockedBy.objects.filter(
+            Q(blocker=self.sender, blocked=self.receiver) |
+            Q(blocked=self.receiver, blocker=self.sender)
+        ).exists():
+            raise ValidationError(
+                "Unable to add someone who you blocked or has you blocked"
+            )
         if IsFriendsWith.objects.filter(
             Q(user1=self.sender, user2=self.receiver) |
             Q(user1=self.receiver, user2=self.sender)
