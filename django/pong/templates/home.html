@@ -1,43 +1,41 @@
 <div class="home">
     <h1 class="welcome">Welcome, {{ user.username }}</h1>
 
-    <div class="home-actions">
-        <button class="home-button" onclick="fetchHTML('main', 'user/pong/')">
-            <img class="home-button-icon" src="static/images/pong.svg" alt="Pong" />
-        </button>
-        <button class="home-button" onclick="fetchHTML('main', 'user/profile/')">
-            <img class="home-button-icon" src="static/images/profile.svg" alt="Profile" />
-        </button>
-        <button class="home-button" onclick="fetchHTML('main', 'user/logout/')">
-            <img class="home-button-icon" src="static/images/logout.svg" alt="Logout" />
-        </button>
-    </div>
+    <div class="home-container">
+        <div class="home-actions">
+            <button class="home-button" onclick="fetchHTML('main', 'pong/')">
+                <img class="home-button-icon" src="static/images/pong.svg" alt="Pong" />
+            </button>
 
-    <div class="home-activities">
-        <ul class="friends-status">
-            <li>
-                <span>lfarias</span>
-                <div class="green-circle"></div>
-            </li>
-            <li>
-                <span>dvargas</span>
-                <div class="green-circle"></div>
-            </li>
-            <li>
-                <span>gcorreia</span>
-                <div class="yellow-circle"></div>
-            </li>
-            <li>
-                <span>vsergio</span>
-                <div class="red-circle"></div>
-            </li>
-            <li>
-                <span>gguedes</span>
-                <div class="red-circle"></div>
-            </li>
-        </ul>
+            <button class="home-button" onclick="fetchHTML('main', 'friends/')">
+                <img class="home-button-icon" src="static/images/friends.svg" alt="Friends" />
+            </button>
 
-        <div class="game-history">
+            <button class="home-button" onclick="fetchHTML('main', 'user/profile/')">
+                <img class="home-button-icon" src="static/images/profile.svg" alt="Profile" />
+            </button>
+
+            <button class="home-button" onclick="fetchHTML('main', 'user/logout/')">
+                <img class="home-button-icon" src="static/images/logout.svg" alt="Logout" />
+            </button>
+        </div>
+
+        <div class="home-activities">
+            <div>
+                <h2>Friends</h2>
+                <div class="friends-status">
+                    <!-- add friends status here -->
+                    <span>No friends yet.</span>
+                </div>
+            </div>
+
+            <div>
+                <h2>Game History</h2>
+                <div class="game-history">
+                    <!-- add game history here -->
+                    <span>No games played yet.</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
